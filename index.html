@@ -1080,7 +1080,7 @@
         <p id="heroDesc">مسجدی آباد و پویا در حاشیه کاشان</p>
         <div class="quick-info" id="quickInfo">
             <span><i class="fas fa-calendar-alt"></i> تأسیس: ۱۳۹۴</span>
-            <span id="imamDisplay"><i class="fas fa-user-tie"></i> امام جماعت: حجت‌الاسلام والمسلمین کاظمزاده</span>
+            <span id="imamDisplay"><i class="fas fa-user-tie"></i> امام جماعت: حجت‌الاسلام والمسلمین کاظم زاده</span>
             <span id="phoneDisplay"><i class="fas fa-phone"></i> خادم مسجد: ۰۳۱-۵۵۵۵۱۲۳۴</span>
         </div>
     </header>
@@ -1131,12 +1131,12 @@
                 <strong>مسجد امام حسن مجتبی (ع)</strong> در سال ۱۳۹۴ در شهرستان کاشان تأسیس شد. این مسجد با هدف ایجاد فضایی برای عبادت، آموزش و فعالیت‌های فرهنگی و اجتماعی، همواره میزبان نمازگزاران و علاقه‌مندان به معارف اسلامی بوده است.
             </p>
             <p id="imamInfo">
-                <strong>امام جماعت:</strong> حجت‌الاسلام والمسلمین رضایی
+                <strong>امام جماعت:</strong> حجت‌الاسلام والمسلمین کاظم زاده 
             </p>
             <p>
                 <strong>برنامه‌های هفتگی:</strong>
                 <br />
-                <i class="fas fa-clock"></i> نماز جماعت: صبح، ظهر و شب
+                <i class="fas fa-clock"></i> نماز جماعت: ظهر و شب
                 <br />
                 <i class="fas fa-book-open"></i> کلاس‌های تفسیر قرآن: پنجشنبه‌ها ساعت ۱۷
                 <br />
@@ -1230,8 +1230,8 @@
         }];
 
         const defaultGallery = [
-            { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' },
-            { id: 2, title: 'کلاس تفسیر', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=کلاس+تفسیر' }
+            { id: 1, title: 'مراسم محرم', image: '' },
+            { id: 2, title: 'کلاس تفسیر', image: '' }
         ];
 
         // ===== بارگذاری داده‌ها =====
@@ -1251,13 +1251,13 @@
         let eventsData = loadData('masjedEvents', defaultEvents);
         let galleryData = loadData('masjedGallery', defaultGallery);
         let settingsData = loadData('masjedSettings', {
-            imam: 'حجت‌الاسلام والمسلمین رضایی',
+            imam: 'حجت‌الاسلام والمسلمین کاظم زاده ',
             phone: '۰۳۱-۵۵۵۵۱۲۳۴'
         });
         let registrationsData = loadData('masjedRegistrations', []);
         let urgentNoticeData = loadData('masjedUrgentNotice', {
             text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
-            active: true
+            active: true 
         });
 
         // ===== به‌روزرسانی تنظیمات =====
