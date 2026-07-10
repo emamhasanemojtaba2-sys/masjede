@@ -1170,546 +1170,491 @@
     </footer>
 
     <script>
-        // (ادامه در بخش دوم)
         // ============================================================
-// JavaScript - مسجد امام حسن مجتبی (ع) - با اتصال به JSONBin
-// ============================================================
+        // JavaScript - مسجد امام حسن مجتبی (ع) - با JSONBin
+        // ============================================================
 
-// ===== تنظیمات JSONBin =====
-const JSONBIN_BIN_ID = '6a50cbecf5f4af5e297c339e';
-const JSONBIN_API_KEY = '$2a$10$AcpQK8sVCDavht9FpStrdebFDt722OKmtJzP.OHtgohN32YoVoOMK';
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        // ===== تنظیمات JSONBin (به‌روز شده) =====
+        const JSONBIN_BIN_ID = '6a50d675f5f4af5e297c5eb0';
+        const JSONBIN_API_KEY = '$2a$10$AcpQK8sVCDavht9FpStrdebFDt722OKmtJzP.OHtgohN32YoVoOMK';
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-// ===== داده‌های پیش‌فرض (اگر سرور خالی بود) =====
-const defaultData = {
-    news: [
-        { id: 1, title: 'برگزاری مراسم عزاداری دهه اول محرم', category: 'مذهبی', content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از اول تا دهم محرم هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود.', date: '۱۴۰۴/۰۴/۰۱', image: '' },
-        { id: 2, title: 'کلاس های تفسیر قرآن کریم آغاز شد', category: 'فرهنگی', content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ با حضور حجت‌الاسلام والمسلمین رضایی برگزار می‌شود.', date: '۱۴۰۴/۰۳/۲۵', image: '' }
-    ],
-    events: [
-        { id: 1, title: 'جشن نیمه شعبان', date: '۱۴۰۴/۰۴/۱۵', time: '۱۹:۰۰', location: 'شبستان مسجد', desc: 'جشن میلاد با سعادت حضرت مهدی (عج) همراه با سخنرانی، مدیحه‌سرایی و پذیرایی', hasRegistration: true, image: '' }
-    ],
-    gallery: [
-        { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' }
-    ],
-    settings: {
-        imam: 'حجت‌الاسلام والمسلمین رضایی',
-        phone: '۰۳۱-۵۵۵۵۱۲۳۴'
-    },
-    registrations: [],
-    urgentNotice: {
-        text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
-        active: true
-    }
-};
+        // ===== داده‌های پیش‌فرض =====
+        const defaultData = {
+            news: [
+                { id: 1, title: 'برگزاری مراسم عزاداری دهه اول محرم', category: 'مذهبی', content: 'مراسم عزاداری سرور و سالار شهیدان...', date: '۱۴۰۴/۰۴/۰۱', image: '' },
+                { id: 2, title: 'کلاس های تفسیر قرآن کریم آغاز شد', category: 'فرهنگی', content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ برگزار می‌شود.', date: '۱۴۰۴/۰۳/۲۵', image: '' }
+            ],
+            events: [
+                { id: 1, title: 'جشن نیمه شعبان', date: '۱۴۰۴/۰۴/۱۵', time: '۱۹:۰۰', location: 'شبستان مسجد', desc: 'جشن میلاد با سعادت حضرت مهدی (عج)...', hasRegistration: true, image: '' }
+            ],
+            gallery: [
+                { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' }
+            ],
+            settings: {
+                imam: 'حجت‌الاسلام والمسلمین کاظم‌زاده',
+                phone: '۰۳۱-۵۵۵۵۱۲۳۴'
+            },
+            registrations: [],
+            urgentNotice: {
+                text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
+                active: true
+            }
+        };
 
-// ===== متغیرهای سراسری داده =====
-let data = {};
+        let data = {};
 
-// ===== خواندن داده از JSONBin =====
-async function fetchData() {
-    try {
-        const response = await fetch(JSONBIN_URL, {
-            headers: {
-                'X-Master-Key': JSONBIN_API_KEY
+        // ===== توابع داده =====
+        async function fetchData() {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const result = await response.json();
+                const record = result.record || result;
+                if (!record || Object.keys(record).length === 0) {
+                    data = JSON.parse(JSON.stringify(defaultData));
+                    await saveData();
+                } else {
+                    data = { ...JSON.parse(JSON.stringify(defaultData)), ...record };
+                    for (const key of Object.keys(defaultData)) {
+                        if (!data[key]) data[key] = JSON.parse(JSON.stringify(defaultData[key]));
+                    }
+                }
+                return data;
+            } catch (error) {
+                console.error('خطا در خواندن داده:', error);
+                const fallback = localStorage.getItem('masjedData');
+                if (fallback) {
+                    try { data = JSON.parse(fallback); } catch (e) { data = JSON.parse(JSON.stringify(defaultData)); }
+                } else {
+                    data = JSON.parse(JSON.stringify(defaultData));
+                }
+                return data;
+            }
+        }
+
+        async function saveData() {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                localStorage.setItem('masjedData', JSON.stringify(data));
+                return true;
+            } catch (error) {
+                console.error('خطا در ذخیره داده:', error);
+                localStorage.setItem('masjedData', JSON.stringify(data));
+                return false;
+            }
+        }
+
+        function getNews() { return data.news || []; }
+
+        function getEvents() { return data.events || []; }
+
+        function getGallery() { return data.gallery || []; }
+
+        function getSettings() { return data.settings || { imam: '', phone: '' }; }
+
+        function getRegistrations() { return data.registrations || []; }
+
+        function getUrgentNotice() { return data.urgentNotice || { text: '', active: false }; }
+
+        // ===== به‌روزرسانی تنظیمات در صفحه =====
+        function applySettings() {
+            const settings = getSettings();
+            const imamDisplay = document.getElementById('imamDisplay');
+            const phoneDisplay = document.getElementById('phoneDisplay');
+            const imamInfo = document.getElementById('imamInfo');
+            const contactPhone = document.getElementById('contactPhone');
+
+            if (imamDisplay) imamDisplay.textContent = `👤 امام جماعت: ${settings.imam}`;
+            if (phoneDisplay) phoneDisplay.textContent = `📞 خادم مسجد: ${settings.phone}`;
+            if (imamInfo) imamInfo.innerHTML = `<strong>امام جماعت:</strong> ${settings.imam}`;
+            if (contactPhone) contactPhone.innerHTML = `<strong>شماره تماس خادم مسجد:</strong> ${settings.phone}`;
+        }
+
+        // ===== مدیریت مودال اطلاعیه =====
+        function loadNoticeModal() {
+            const notice = getUrgentNotice();
+            const modal = document.getElementById('noticeModal');
+            const text = document.getElementById('noticeModalText');
+            if (notice.active && notice.text) {
+                text.textContent = notice.text;
+                modal.classList.add('show');
+            } else {
+                modal.classList.remove('show');
+            }
+        }
+
+        function closeNoticeModal() {
+            document.getElementById('noticeModal').classList.remove('show');
+        }
+
+        // ===== Lightbox =====
+        function openLightbox(src) {
+            const overlay = document.getElementById('lightboxOverlay');
+            const img = document.getElementById('lightboxImage');
+            img.src = src;
+            img.style.display = 'block';
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const overlay = document.getElementById('lightboxOverlay');
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('lightboxOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('lightboxOverlay').classList.contains('open')) closeLightbox();
+                if (document.getElementById('sidebar').classList.contains('open')) closeSidebar();
+                if (document.getElementById('registerModal').classList.contains('open')) closeRegisterModal();
+                if (document.getElementById('noticeModal').classList.contains('show')) closeNoticeModal();
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // ===== نمایش اخبار =====
+        function renderNews() {
+            const container = document.getElementById('newsContainer');
+            if (!container) return;
+            container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
+
+            const news = getNews();
+            if (news.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">هنوز خبری ثبت نشده است.</p>`;
+                return;
+            }
+
+            container.innerHTML = news.map(newsItem => `
+                <div class="news-card">
+                    ${newsItem.image ? `<img src="${newsItem.image}" class="news-image" alt="${newsItem.title}" onclick="event.stopPropagation(); openLightbox('${newsItem.image}')" />` : ''}
+                    <span class="category">${newsItem.category}</span>
+                    <h4>${newsItem.title}</h4>
+                    <p style="font-size:0.95rem; color:var(--text-muted);">${newsItem.content.substring(0, 120)}${newsItem.content.length > 120 ? '...' : ''}</p>
+                    <div class="meta">
+                        <span><i class="far fa-calendar-alt"></i> ${newsItem.date || 'تاریخ نامشخص'}</span>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        const result = await response.json();
-        const record = result.record || result;
+        // ===== نمایش رویدادها =====
+        function renderEvents() {
+            const container = document.getElementById('eventsContainer');
+            if (!container) return;
+            container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
 
-        // اگر داده خالی بود، از داده‌های پیش‌فرض استفاده کن
-        if (!record || Object.keys(record).length === 0) {
-            data = JSON.parse(JSON.stringify(defaultData));
-            await saveData();
-        } else {
-            // داده‌های موجود را با داده‌های پیش‌فرض ادغام کن
-            data = {
-                ...JSON.parse(JSON.stringify(defaultData)),
-                ...record
+            const events = getEvents();
+            if (events.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">هنوز رویدادی ثبت نشده است.</p>`;
+                return;
+            }
+
+            container.innerHTML = events.map(event => `
+                <div class="event-card" id="event-${event.id}">
+                    ${event.image ? `<img src="${event.image}" class="event-image" alt="${event.title}" onclick="event.stopPropagation(); openLightbox('${event.image}')" />` : ''}
+                    <div class="date"><i class="far fa-calendar-alt"></i> ${event.date || 'تاریخ نامشخص'} ${event.time ? `<i class="far fa-clock"></i> ${event.time}` : ''}</div>
+                    <h4>${event.title}</h4>
+                    ${event.location ? `<p style="font-size:0.9rem; color:var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${event.location}</p>` : ''}
+                    <p style="font-size:0.95rem; color:var(--dark);">${event.desc}</p>
+                    ${event.hasRegistration ? 
+                        `<button class="register-btn" onclick="openRegisterModal(${event.id})"><i class="fas fa-pen"></i> ثبت‌نام در رویداد</button>` : 
+                        ''}
+                </div>
+            `).join('');
+        }
+
+        // ===== نمایش گالری =====
+        function renderGallery() {
+            const container = document.getElementById('galleryContainer');
+            if (!container) return;
+
+            const gallery = getGallery();
+            if (gallery.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
+                return;
+            }
+
+            container.innerHTML = gallery.map(item => `
+                <div class="gallery-item" onclick="openLightbox('${item.image}')">
+                    <img src="${item.image}" alt="${item.title}" loading="lazy" />
+                    <div class="gallery-title">${item.title || 'بدون عنوان'}</div>
+                </div>
+            `).join('');
+        }
+
+        // ===== مودال ثبت‌نام =====
+        const registerModal = document.getElementById('registerModal');
+        const registerFormContainer = document.getElementById('registerFormContainer');
+        const registerSuccessMessage = document.getElementById('registerSuccessMessage');
+        let currentEventId = null;
+
+        function openRegisterModal(eventId) {
+            currentEventId = eventId;
+            const events = getEvents();
+            const event = events.find(e => e.id === eventId);
+            if (!event) return;
+
+            document.getElementById('registerModalTitle').textContent = `📝 ثبت‌نام در رویداد: ${event.title}`;
+            registerFormContainer.style.display = 'block';
+            registerSuccessMessage.style.display = 'none';
+
+            document.getElementById('regFullName').value = '';
+            document.getElementById('regNationalCode').value = '';
+            document.getElementById('regPhone').value = '';
+            document.getElementById('regFatherName').value = '';
+            document.getElementById('regBirthDate').value = '';
+
+            registerModal.classList.add('open');
+        }
+
+        function closeRegisterModal() {
+            registerModal.classList.remove('open');
+            currentEventId = null;
+        }
+
+        document.getElementById('registerCancelBtn')?.addEventListener('click', closeRegisterModal);
+        registerModal?.addEventListener('click', function(e) {
+            if (e.target === this) closeRegisterModal();
+        });
+
+        // ===== ثبت‌نام =====
+        document.getElementById('registerSubmitBtn')?.addEventListener('click', async function() {
+            const fullName = document.getElementById('regFullName').value.trim();
+            const nationalCode = document.getElementById('regNationalCode').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const fatherName = document.getElementById('regFatherName').value.trim();
+            const birthDate = document.getElementById('regBirthDate').value.trim();
+
+            if (!fullName || !nationalCode || !phone || !fatherName || !birthDate) {
+                alert('❌ لطفاً همه فیلدها را پر کنید.');
+                return;
+            }
+
+            if (nationalCode.length !== 10 || isNaN(nationalCode)) {
+                alert('❌ کد ملی باید ۱۰ رقم باشد.');
+                return;
+            }
+
+            const events = getEvents();
+            const event = events.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            const registrations = getRegistrations();
+            const newRegistration = {
+                id: Date.now(),
+                eventId: currentEventId,
+                eventTitle: event.title,
+                fullName,
+                nationalCode,
+                phone,
+                fatherName,
+                birthDate,
+                registeredAt: new Date().toLocaleDateString('fa-IR')
             };
-            // اطمینان از وجود همه کلیدها
-            for (const key of Object.keys(defaultData)) {
-                if (!data[key]) {
-                    data[key] = JSON.parse(JSON.stringify(defaultData[key]));
+
+            registrations.push(newRegistration);
+            data.registrations = registrations;
+            await saveData();
+
+            registerFormContainer.style.display = 'none';
+            registerSuccessMessage.style.display = 'block';
+
+            setTimeout(() => {
+                closeRegisterModal();
+            }, 2000);
+        });
+
+        // ===== اعلان =====
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) return;
+            if (Notification.permission === 'granted') return;
+            if (Notification.permission === 'denied') return;
+            Notification.requestPermission();
+        }
+
+        // ===== دارک مود هوشمند =====
+        function autoDarkMode() {
+            const hour = new Date().getHours();
+            if (hour >= 20 || hour < 6) {
+                if (!document.body.hasAttribute('data-theme')) {
+                    document.body.setAttribute('data-theme', 'night');
+                    localStorage.setItem('theme', 'night');
                 }
             }
         }
 
-        return data;
-    } catch (error) {
-        console.error('خطا در خواندن داده از JSONBin:', error);
-        // در صورت خطا، از داده‌های localStorage استفاده کن (Fallback)
-        const fallbackData = loadLocalData();
-        if (fallbackData && Object.keys(fallbackData).length > 0) {
-            data = fallbackData;
-        } else {
-            data = JSON.parse(JSON.stringify(defaultData));
-        }
-        return data;
-    }
-}
+        // ===== نمایش بخش‌ها با اسکرول =====
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
 
-// ===== ذخیره داده در JSONBin =====
-async function saveData() {
-    try {
-        const response = await fetch(JSONBIN_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_API_KEY
-            },
-            body: JSON.stringify(data)
+        // ===== دکمه بازگشت به بالا =====
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            scrollBtn.classList.toggle('visible', window.scrollY > 400);
+        });
+        scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ===== منوی کناری =====
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        hamburgerBtn?.addEventListener('click', openSidebar);
+        closeSidebarBtn?.addEventListener('click', closeSidebar);
+        sidebarOverlay?.addEventListener('click', closeSidebar);
+
+        // ===== مدیریت تم =====
+        function setTheme(themeName) {
+            const body = document.body;
+            if (themeName === 'reset') {
+                body.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+                autoDarkMode();
+                return;
+            }
+            body.setAttribute('data-theme', themeName);
+            localStorage.setItem('theme', themeName);
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+        } else {
+            autoDarkMode();
+        }
+
+        document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTheme(this.dataset.themeBtn);
+                closeSidebar();
+            });
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // ===== حالت مطالعه =====
+        const readingBtn = document.getElementById('readingBtnSidebar');
+        let readingMode = localStorage.getItem('readingMode') === 'true';
+
+        function toggleReadingMode() {
+            readingMode = !readingMode;
+            document.body.classList.toggle('reading-mode', readingMode);
+            localStorage.setItem('readingMode', String(readingMode));
+            readingBtn.classList.toggle('active', readingMode);
+            readingBtn.innerHTML = readingMode ? '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی' : '<i class="fas fa-eye"></i> فعال‌سازی';
         }
 
-        // همچنین در localStorage ذخیره کن (به عنوان پشتیبان)
-        saveLocalData(data);
-
-        return true;
-    } catch (error) {
-        console.error('خطا در ذخیره داده در JSONBin:', error);
-        // در صورت خطا، در localStorage ذخیره کن
-        saveLocalData(data);
-        return false;
-    }
-}
-
-// ===== پشتیبان localStorage =====
-function loadLocalData() {
-    const stored = localStorage.getItem('masjedData');
-    if (stored) {
-        try { return JSON.parse(stored); } catch (e) { return null; }
-    }
-    return null;
-}
-
-function saveLocalData(dataToSave) {
-    localStorage.setItem('masjedData', JSON.stringify(dataToSave));
-}
-
-// ===== توابع دسترسی به داده‌ها (برای استفاده در جاهای دیگر) =====
-function getNews() { return data.news || []; }
-function getEvents() { return data.events || []; }
-function getGallery() { return data.gallery || []; }
-function getSettings() { return data.settings || { imam: '', phone: '' }; }
-function getRegistrations() { return data.registrations || []; }
-function getUrgentNotice() { return data.urgentNotice || { text: '', active: false }; }
-
-function setNews(news) { data.news = news; return saveData(); }
-function setEvents(events) { data.events = events; return saveData(); }
-function setGallery(gallery) { data.gallery = gallery; return saveData(); }
-function setSettings(settings) { data.settings = settings; return saveData(); }
-function setRegistrations(registrations) { data.registrations = registrations; return saveData(); }
-function setUrgentNotice(notice) { data.urgentNotice = notice; return saveData(); }
-
-// ===== به‌روزرسانی تنظیمات در صفحه =====
-function applySettings() {
-    const settings = getSettings();
-    const imamDisplay = document.getElementById('imamDisplay');
-    const phoneDisplay = document.getElementById('phoneDisplay');
-    const imamInfo = document.getElementById('imamInfo');
-    const contactPhone = document.getElementById('contactPhone');
-
-    if (imamDisplay) imamDisplay.textContent = `👤 امام جماعت: ${settings.imam}`;
-    if (phoneDisplay) phoneDisplay.textContent = `📞 خادم مسجد: ${settings.phone}`;
-    if (imamInfo) imamInfo.innerHTML = `<strong>امام جماعت:</strong> ${settings.imam}`;
-    if (contactPhone) contactPhone.innerHTML = `<strong>شماره تماس خادم مسجد:</strong> ${settings.phone}`;
-}
-
-// ===== مدیریت مودال اطلاعیه =====
-function loadNoticeModal() {
-    const notice = getUrgentNotice();
-    const modal = document.getElementById('noticeModal');
-    const text = document.getElementById('noticeModalText');
-    if (notice.active && notice.text) {
-        text.textContent = notice.text;
-        modal.classList.add('show');
-    } else {
-        modal.classList.remove('show');
-    }
-}
-
-function closeNoticeModal() {
-    document.getElementById('noticeModal').classList.remove('show');
-}
-
-// ===== Lightbox =====
-function openLightbox(src) {
-    const overlay = document.getElementById('lightboxOverlay');
-    const img = document.getElementById('lightboxImage');
-    img.src = src;
-    img.style.display = 'block';
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    const overlay = document.getElementById('lightboxOverlay');
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-}
-
-document.getElementById('lightboxOverlay')?.addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-});
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        if (document.getElementById('lightboxOverlay').classList.contains('open')) closeLightbox();
-        if (document.getElementById('sidebar').classList.contains('open')) closeSidebar();
-        if (document.getElementById('registerModal').classList.contains('open')) closeRegisterModal();
-        if (document.getElementById('noticeModal').classList.contains('show')) closeNoticeModal();
-    }
-});
-
-// ===== نمایش اخبار =====
-function renderNews() {
-    const container = document.getElementById('newsContainer');
-    if (!container) return;
-    container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
-
-    const news = getNews();
-    if (news.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-muted);">هنوز خبری ثبت نشده است.</p>`;
-        return;
-    }
-
-    container.innerHTML = news.map(newsItem => `
-        <div class="news-card">
-            ${newsItem.image ? `<img src="${newsItem.image}" class="news-image" alt="${newsItem.title}" onclick="event.stopPropagation(); openLightbox('${newsItem.image}')" />` : ''}
-            <span class="category">${newsItem.category}</span>
-            <h4>${newsItem.title}</h4>
-            <p style="font-size:0.95rem; color:var(--text-muted);">${newsItem.content.substring(0, 120)}${newsItem.content.length > 120 ? '...' : ''}</p>
-            <div class="meta">
-                <span><i class="far fa-calendar-alt"></i> ${newsItem.date || 'تاریخ نامشخص'}</span>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ===== نمایش رویدادها =====
-function renderEvents() {
-    const container = document.getElementById('eventsContainer');
-    if (!container) return;
-    container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
-
-    const events = getEvents();
-    if (events.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-muted);">هنوز رویدادی ثبت نشده است.</p>`;
-        return;
-    }
-
-    container.innerHTML = events.map(event => `
-        <div class="event-card" id="event-${event.id}">
-            ${event.image ? `<img src="${event.image}" class="event-image" alt="${event.title}" onclick="event.stopPropagation(); openLightbox('${event.image}')" />` : ''}
-            <div class="date"><i class="far fa-calendar-alt"></i> ${event.date || 'تاریخ نامشخص'} ${event.time ? `<i class="far fa-clock"></i> ${event.time}` : ''}</div>
-            <h4>${event.title}</h4>
-            ${event.location ? `<p style="font-size:0.9rem; color:var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${event.location}</p>` : ''}
-            <p style="font-size:0.95rem; color:var(--dark);">${event.desc}</p>
-            ${event.hasRegistration ? 
-                `<button class="register-btn" onclick="openRegisterModal(${event.id})"><i class="fas fa-pen"></i> ثبت‌نام در رویداد</button>` : 
-                ''}
-        </div>
-    `).join('');
-}
-
-// ===== نمایش گالری =====
-function renderGallery() {
-    const container = document.getElementById('galleryContainer');
-    if (!container) return;
-
-    const gallery = getGallery();
-    if (gallery.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
-        return;
-    }
-
-    container.innerHTML = gallery.map(item => `
-        <div class="gallery-item" onclick="openLightbox('${item.image}')">
-            <img src="${item.image}" alt="${item.title}" loading="lazy" />
-            <div class="gallery-title">${item.title || 'بدون عنوان'}</div>
-        </div>
-    `).join('');
-}
-
-// ===== مودال ثبت‌نام =====
-const registerModal = document.getElementById('registerModal');
-const registerFormContainer = document.getElementById('registerFormContainer');
-const registerSuccessMessage = document.getElementById('registerSuccessMessage');
-let currentEventId = null;
-
-function openRegisterModal(eventId) {
-    currentEventId = eventId;
-    const events = getEvents();
-    const event = events.find(e => e.id === eventId);
-    if (!event) return;
-
-    document.getElementById('registerModalTitle').textContent = `📝 ثبت‌نام در رویداد: ${event.title}`;
-    registerFormContainer.style.display = 'block';
-    registerSuccessMessage.style.display = 'none';
-
-    document.getElementById('regFullName').value = '';
-    document.getElementById('regNationalCode').value = '';
-    document.getElementById('regPhone').value = '';
-    document.getElementById('regFatherName').value = '';
-    document.getElementById('regBirthDate').value = '';
-
-    registerModal.classList.add('open');
-}
-
-function closeRegisterModal() {
-    registerModal.classList.remove('open');
-    currentEventId = null;
-}
-
-document.getElementById('registerCancelBtn')?.addEventListener('click', closeRegisterModal);
-registerModal?.addEventListener('click', function(e) {
-    if (e.target === this) closeRegisterModal();
-});
-
-// ===== ثبت‌نام =====
-document.getElementById('registerSubmitBtn')?.addEventListener('click', async function() {
-    const fullName = document.getElementById('regFullName').value.trim();
-    const nationalCode = document.getElementById('regNationalCode').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
-    const fatherName = document.getElementById('regFatherName').value.trim();
-    const birthDate = document.getElementById('regBirthDate').value.trim();
-
-    if (!fullName || !nationalCode || !phone || !fatherName || !birthDate) {
-        alert('❌ لطفاً همه فیلدها را پر کنید.');
-        return;
-    }
-
-    if (nationalCode.length !== 10 || isNaN(nationalCode)) {
-        alert('❌ کد ملی باید ۱۰ رقم باشد.');
-        return;
-    }
-
-    const events = getEvents();
-    const event = events.find(e => e.id === currentEventId);
-    if (!event) return;
-
-    const registrations = getRegistrations();
-    const newRegistration = {
-        id: Date.now(),
-        eventId: currentEventId,
-        eventTitle: event.title,
-        fullName,
-        nationalCode,
-        phone,
-        fatherName,
-        birthDate,
-        registeredAt: new Date().toLocaleDateString('fa-IR')
-    };
-
-    registrations.push(newRegistration);
-    await setRegistrations(registrations);
-
-    registerFormContainer.style.display = 'none';
-    registerSuccessMessage.style.display = 'block';
-
-    setTimeout(() => {
-        closeRegisterModal();
-    }, 2000);
-});
-
-// ===== اعلان =====
-function requestNotificationPermission() {
-    if (!('Notification' in window)) return;
-    if (Notification.permission === 'granted') return;
-    if (Notification.permission === 'denied') return;
-    Notification.requestPermission();
-}
-
-// ===== دارک مود هوشمند =====
-function autoDarkMode() {
-    const hour = new Date().getHours();
-    if (hour >= 20 || hour < 6) {
-        if (!document.body.hasAttribute('data-theme')) {
-            document.body.setAttribute('data-theme', 'night');
-            localStorage.setItem('theme', 'night');
+        if (readingMode) {
+            document.body.classList.add('reading-mode');
+            readingBtn.classList.add('active');
+            readingBtn.innerHTML = '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی';
         }
-    }
-}
+        readingBtn?.addEventListener('click', toggleReadingMode);
 
-// ===== نمایش بخش‌ها با اسکرول =====
-const sections = document.querySelectorAll('.section');
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-}, { threshold: 0.1 });
-sections.forEach(section => observer.observe(section));
+        // ===== هایلایت منو =====
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section[id], header[id]').forEach(section => {
+                const top = section.offsetTop - 120;
+                if (window.scrollY >= top) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.style.borderBottomColor = 'transparent';
+                link.style.background = 'transparent';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.borderBottomColor = 'var(--gold)';
+                    link.style.background = 'rgba(201, 168, 76, 0.1)';
+                }
+            });
+        });
 
-// ===== دکمه بازگشت به بالا =====
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-    scrollBtn.classList.toggle('visible', window.scrollY > 400);
-});
-scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        // ===== مقداردهی اولیه =====
+        document.addEventListener('DOMContentLoaded', async function() {
+            const skeletons = document.querySelectorAll('.skeleton-loading');
 
-// ===== منوی کناری =====
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            await fetchData();
 
-function openSidebar() {
-    sidebar.classList.add('open');
-    sidebarOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
+            applySettings();
+            renderNews();
+            renderEvents();
+            renderGallery();
+            loadNoticeModal();
 
-function closeSidebar() {
-    sidebar.classList.remove('open');
-    sidebarOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-}
+            setTimeout(() => {
+                skeletons.forEach(el => el.remove());
+            }, 500);
 
-hamburgerBtn?.addEventListener('click', openSidebar);
-closeSidebarBtn?.addEventListener('click', closeSidebar);
-sidebarOverlay?.addEventListener('click', closeSidebar);
+            requestNotificationPermission();
 
-// ===== مدیریت تم =====
-function setTheme(themeName) {
-    const body = document.body;
-    if (themeName === 'reset') {
-        body.removeAttribute('data-theme');
-        localStorage.removeItem('theme');
-        autoDarkMode();
-        return;
-    }
-    body.setAttribute('data-theme', themeName);
-    localStorage.setItem('theme', themeName);
-}
+            setTimeout(() => {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed; bottom: 2rem; right: 2rem;
+                    background: rgba(26, 92, 58, 0.95); color: #f5f0e8;
+                    padding: 0.8rem 1.8rem; border-radius: 50px;
+                    font-size: 0.95rem; font-weight: 500;
+                    border: 2px solid var(--gold);
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                    z-index: 9999; backdrop-filter: blur(8px);
+                    animation: slideDown 0.5s ease;
+                    direction: rtl; font-family: var(--font);
+                `;
+                toast.innerHTML = '<i class="fas fa-mosque"></i> به وبگاه مسجد امام حسن مجتبی (ع) خوش آمدید';
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(30px)';
+                    setTimeout(() => toast.remove(), 600);
+                }, 4000);
+            }, 1000);
+        });
 
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    document.body.setAttribute('data-theme', savedTheme);
-} else {
-    autoDarkMode();
-}
-
-document.querySelectorAll('[data-theme-btn]').forEach(btn => {
-    btn.addEventListener('click', function() {
-        setTheme(this.dataset.themeBtn);
-        closeSidebar();
-    });
-});
-
-// ===== حالت مطالعه =====
-const readingBtn = document.getElementById('readingBtnSidebar');
-let readingMode = localStorage.getItem('readingMode') === 'true';
-
-function toggleReadingMode() {
-    readingMode = !readingMode;
-    document.body.classList.toggle('reading-mode', readingMode);
-    localStorage.setItem('readingMode', String(readingMode));
-    readingBtn.classList.toggle('active', readingMode);
-    readingBtn.innerHTML = readingMode ? '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی' : '<i class="fas fa-eye"></i> فعال‌سازی';
-}
-
-if (readingMode) {
-    document.body.classList.add('reading-mode');
-    readingBtn.classList.add('active');
-    readingBtn.innerHTML = '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی';
-}
-readingBtn?.addEventListener('click', toggleReadingMode);
-
-// ===== هایلایت منو =====
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-    let current = '';
-    document.querySelectorAll('section[id], header[id]').forEach(section => {
-        const top = section.offsetTop - 120;
-        if (window.scrollY >= top) current = section.getAttribute('id');
-    });
-    navLinks.forEach(link => {
-        link.style.borderBottomColor = 'transparent';
-        link.style.background = 'transparent';
-        if (link.getAttribute('href') === '#' + current) {
-            link.style.borderBottomColor = 'var(--gold)';
-            link.style.background = 'rgba(201, 168, 76, 0.1)';
-        }
-    });
-});
-
-// ===== مقداردهی اولیه =====
-document.addEventListener('DOMContentLoaded', async function() {
-    // نمایش اسکلت لودینگ
-    const skeletons = document.querySelectorAll('.skeleton-loading');
-
-    // بارگذاری داده از JSONBin
-    await fetchData();
-
-    // اعمال تنظیمات
-    applySettings();
-
-    // رندر کردن بخش‌ها
-    renderNews();
-    renderEvents();
-    renderGallery();
-    loadNoticeModal();
-
-    // حذف اسکلت‌ها
-    setTimeout(() => {
-        skeletons.forEach(el => el.remove());
-    }, 500);
-
-    requestNotificationPermission();
-
-    // Toast خوش‌آمدگویی
-    setTimeout(() => {
-        const toast = document.createElement('div');
-        toast.style.cssText = `
-            position: fixed; bottom: 2rem; right: 2rem;
-            background: rgba(26, 92, 58, 0.95); color: #f5f0e8;
-            padding: 0.8rem 1.8rem; border-radius: 50px;
-            font-size: 0.95rem; font-weight: 500;
-            border: 2px solid var(--gold);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            z-index: 9999; backdrop-filter: blur(8px);
-            animation: slideDown 0.5s ease;
-            direction: rtl; font-family: var(--font);
-        `;
-        toast.innerHTML = '<i class="fas fa-mosque"></i> به وبگاه مسجد امام حسن مجتبی (ع) خوش آمدید';
-        document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(30px)';
-            setTimeout(() => toast.remove(), 600);
-        }, 4000);
-    }, 1000);
-});
-
-// ===== توابع سراسری =====
-window.closeNoticeModal = closeNoticeModal;
-window.openRegisterModal = openRegisterModal;
-window.openLightbox = openLightbox;
-window.closeLightbox = closeLightbox;
-window.getNews = getNews;
-window.getEvents = getEvents;
-window.getGallery = getGallery;
-window.getSettings = getSettings;
-window.getRegistrations = getRegistrations;
-window.getUrgentNotice = getUrgentNotice;
-window.setNews = setNews;
-window.setEvents = setEvents;
-window.setGallery = setGallery;
-window.setSettings = setSettings;
-window.setRegistrations = setRegistrations;
-window.setUrgentNotice = setUrgentNotice;
-window.fetchData = fetchData;
-window.saveData = saveData;
+        // ===== توابع سراسری =====
+        window.closeNoticeModal = closeNoticeModal;
+        window.openRegisterModal = openRegisterModal;
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+        window.getNews = getNews;
+        window.getEvents = getEvents;
+        window.getGallery = getGallery;
+        window.getSettings = getSettings;
+        window.getRegistrations = getRegistrations;
+        window.getUrgentNotice = getUrgentNotice;
+        window.fetchData = fetchData;
+        window.saveData = saveData;
     </script>
 </body>
 </html>

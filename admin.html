@@ -680,7 +680,7 @@
         // ============================================================
 
         // ===== تنظیمات JSONBin =====
-        const JSONBIN_BIN_ID = '6a50cbecf5f4af5e297c339e';
+        const JSONBIN_BIN_ID = '6a50d675f5f4af5e297c5eb0';
         const JSONBIN_API_KEY = '$2a$10$AcpQK8sVCDavht9FpStrdebFDt722OKmtJzP.OHtgohN32YoVoOMK';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
@@ -697,7 +697,7 @@
                 { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' }
             ],
             settings: {
-                imam: 'حجت‌الاسلام والمسلمین رضایی',
+                imam: 'حجت‌الاسلام والمسلمین کاظم‌زاده',
                 phone: '۰۳۱-۵۵۵۵۱۲۳۴'
             },
             registrations: [],
@@ -1127,7 +1127,7 @@
                     <thead><tr><th>رویداد</th><th>نام و نام‌خانوادگی</th><th>کد ملی</th><th>تلفن</th><th>نام پدر</th><th>تاریخ تولد</th><th>تاریخ ثبت</th></tr></thead>
                     <tbody>
             `;
-                        registrations.forEach(reg => {
+            registrations.forEach(reg => {
                 htmlContent += `
                     <tr>
                         <td>${reg.eventTitle || ''}</td>
