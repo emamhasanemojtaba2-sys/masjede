@@ -140,14 +140,8 @@
             display: block;
         }
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .admin-content .panel-title {
             font-size: 1.6rem;
@@ -674,585 +668,576 @@
         </main>
     </div>
 
+    <!-- ===== بخش دوم: JavaScript ===== -->
     <script>
+        // (ادامه در بخش دوم)
         // ============================================================
-        // JavaScript - پنل مدیریت مسجد امام حسن مجتبی (ع) - با JSONBin
-        // ============================================================
+// JavaScript - پنل مدیریت مسجد امام حسن مجتبی (ع)
+// ============================================================
 
-        // ===== تنظیمات JSONBin =====
-        const JSONBIN_BIN_ID = '6a50d675f5f4af5e297c5eb0';
-        const JSONBIN_API_KEY = '$2a$10$AcpQK8sVCDavht9FpStrdebFDt722OKmtJzP.OHtgohN32YoVoOMK';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+// ===== رمز ورود =====
+const ADMIN_PASSWORD = '1251351123';
 
-        // ===== داده‌های پیش‌فرض =====
-        const defaultData = {
-            news: [
-                { id: 1, title: 'برگزاری مراسم عزاداری دهه اول محرم', category: 'مذهبی', content: 'مراسم عزاداری سرور و سالار شهیدان...', date: '۱۴۰۴/۰۴/۰۱', image: '' },
-                { id: 2, title: 'کلاس های تفسیر قرآن کریم آغاز شد', category: 'فرهنگی', content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ برگزار می‌شود.', date: '۱۴۰۴/۰۳/۲۵', image: '' }
-            ],
-            events: [
-                { id: 1, title: 'جشن نیمه شعبان', date: '۱۴۰۴/۰۴/۱۵', time: '۱۹:۰۰', location: 'شبستان مسجد', desc: 'جشن میلاد با سعادت حضرت مهدی (عج)...', hasRegistration: true, image: '' }
-            ],
-            gallery: [
-                { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' }
-            ],
-            settings: {
-                imam: 'حجت‌الاسلام والمسلمین کاظم‌زاده',
-                phone: '۰۳۱-۵۵۵۵۱۲۳۴'
-            },
-            registrations: [],
-            urgentNotice: {
-                text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
-                active: true
-            }
-        };
+// ===== داده‌های نمونه (همانند صفحه اصلی) =====
+const defaultNews = [{
+    id: 1,
+    title: 'برگزاری مراسم عزاداری دهه اول محرم',
+    category: 'مذهبی',
+    content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از اول تا دهم محرم هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود. سخنران: حجت‌الاسلام والمسلمین رضایی',
+    date: '۱۴۰۴/۰۴/۰۱',
+    image: ''
+}, {
+    id: 2,
+    title: 'کلاس های تفسیر قرآن کریم آغاز شد',
+    category: 'فرهنگی',
+    content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ با حضور حجت‌الاسلام والمسلمین رضایی برگزار می‌شود. شرکت برای عموم آزاد است.',
+    date: '۱۴۰۴/۰۳/۲۵',
+    image: ''
+}, {
+    id: 3,
+    title: 'تعمیرات و بهسازی شبستان مسجد',
+    category: 'اطلاعیه',
+    content: 'به اطلاع نمازگزاران عزیز می‌رساند، شبستان مسجد از تاریخ ۱۴۰۴/۰۴/۱۰ تا ۱۴۰۴/۰۴/۲۰ به مدت ۱۰ روز جهت تعمیرات و بهسازی تعطیل خواهد بود. نمازهای جماعت در فضای باز حیاط مسجد برگزار می‌شود.',
+    date: '۱۴۰۴/۰۳/۲۰',
+    image: ''
+}];
 
-        let data = {};
-        let editingNewsId = null;
-        let editingEventId = null;
-        const ADMIN_PASSWORD = '1251351123';
+const defaultEvents = [{
+    id: 1,
+    title: 'جشن نیمه شعبان',
+    date: '۱۴۰۴/۰۴/۱۵',
+    time: '۱۹:۰۰',
+    location: 'شبستان مسجد',
+    desc: 'جشن میلاد با سعادت حضرت مهدی (عج) همراه با سخنرانی، مدیحه‌سرایی و پذیرایی',
+    hasRegistration: true,
+    image: ''
+}, {
+    id: 2,
+    title: 'دوره آموزشی احکام و اخلاق',
+    date: '۱۴۰۴/۰۴/۲۰',
+    time: '۱۶:۰۰',
+    location: 'سالن اجتماعات مسجد',
+    desc: 'دوره آموزشی احکام روزه، نماز و اخلاق اسلامی ویژه برادران و خواهران',
+    hasRegistration: false,
+    image: ''
+}];
 
-        // ===== توابع داده =====
-        async function fetchData() {
-            try {
-                const response = await fetch(JSONBIN_URL, {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const result = await response.json();
-                const record = result.record || result;
-                if (!record || Object.keys(record).length === 0) {
-                    data = JSON.parse(JSON.stringify(defaultData));
-                    await saveData();
-                } else {
-                    data = { ...JSON.parse(JSON.stringify(defaultData)), ...record };
-                    for (const key of Object.keys(defaultData)) {
-                        if (!data[key]) data[key] = JSON.parse(JSON.stringify(defaultData[key]));
-                    }
-                }
-                return data;
-            } catch (error) {
-                console.error('خطا در خواندن داده:', error);
-                const fallback = localStorage.getItem('masjedData');
-                if (fallback) {
-                    try { data = JSON.parse(fallback); } catch (e) { data = JSON.parse(JSON.stringify(defaultData)); }
-                } else {
-                    data = JSON.parse(JSON.stringify(defaultData));
-                }
-                return data;
-            }
+const defaultGallery = [
+    { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' },
+    { id: 2, title: 'کلاس تفسیر', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=کلاس+تفسیر' }
+];
+
+// ===== بارگذاری داده‌ها =====
+function loadData(key, defaultData) {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+        try { return JSON.parse(stored); } catch (e) { return defaultData; }
+    }
+    return defaultData;
+}
+
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+let newsData = loadData('masjedNews', defaultNews);
+let eventsData = loadData('masjedEvents', defaultEvents);
+let galleryData = loadData('masjedGallery', defaultGallery);
+let settingsData = loadData('masjedSettings', {
+    imam: 'حجت‌الاسلام والمسلمین رضایی',
+    phone: '۰۳۱-۵۵۵۵۱۲۳۴'
+});
+let registrationsData = loadData('masjedRegistrations', []);
+let urgentNoticeData = loadData('masjedUrgentNotice', {
+    text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
+    active: true
+});
+
+let editingNewsId = null;
+let editingEventId = null;
+
+// ===== ورود به پنل =====
+const loginOverlay = document.getElementById('loginOverlay');
+const loginPassword = document.getElementById('adminLoginPassword');
+const loginConfirmBtn = document.getElementById('loginConfirmBtn');
+const loginCancelBtn = document.getElementById('loginCancelBtn');
+
+// بررسی وضعیت ورود از sessionStorage
+function checkLoginStatus() {
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+        loginOverlay.classList.add('hidden');
+        document.getElementById('adminContainer').style.display = 'flex';
+        loadAllData();
+        updateStats();
+        return true;
+    }
+    return false;
+}
+
+loginConfirmBtn?.addEventListener('click', function() {
+    const password = loginPassword.value.trim();
+    if (password === ADMIN_PASSWORD) {
+        loginOverlay.classList.add('hidden');
+        document.getElementById('adminContainer').style.display = 'flex';
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        loadAllData();
+        updateStats();
+        loginPassword.value = '';
+    } else {
+        alert('❌ رمز عبور اشتباه است!');
+        loginPassword.value = '';
+        loginPassword.focus();
+    }
+});
+
+// ورود با کلید Enter
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !loginOverlay.classList.contains('hidden')) {
+        loginConfirmBtn?.click();
+    }
+});
+
+// ===== خروج =====
+function logout() {
+    if (confirm('آیا از خروج از پنل مدیریت مطمئن هستید؟')) {
+        document.getElementById('adminContainer').style.display = 'none';
+        loginOverlay.classList.remove('hidden');
+        loginPassword.value = '';
+        sessionStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminLoggedIn');
+    }
+}
+
+// ===== ناوبری =====
+document.querySelectorAll('.menu-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.menu-item[data-panel]').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const panel = this.dataset.panel;
+        document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${panel}`).classList.add('active');
+    });
+});
+
+// ===== بارگذاری همه داده‌ها =====
+function loadAllData() {
+    renderNewsList();
+    renderEventsList();
+    renderRegistrationsList();
+    renderGalleryList();
+    loadSettings();
+    loadNotice();
+}
+
+// ===== آمار =====
+function updateStats() {
+    document.getElementById('statNews').textContent = newsData.length;
+    document.getElementById('statEvents').textContent = eventsData.length;
+    document.getElementById('statRegistrations').textContent = registrationsData.length;
+    document.getElementById('statGallery').textContent = galleryData.length;
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
+}
+
+// ===== آپلود تصویر به Base64 =====
+function uploadImageToBase64(input, targetId) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById(targetId).value = e.target.result;
+        alert('✅ تصویر با موفقیت بارگذاری شد.');
+    };
+    reader.readAsDataURL(file);
+}
+window.uploadImageToBase64 = uploadImageToBase64;
+
+// ===== مدیریت اخبار =====
+function renderNewsList() {
+    const tbody = document.getElementById('adminNewsList');
+    if (!tbody) return;
+    if (newsData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">خبری موجود نیست.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = newsData.map(news => `
+        <tr>
+            <td>${news.title}</td>
+            <td>${news.category}</td>
+            <td>${news.date || 'نامشخص'}</td>
+            <td>
+                <button class="btn-secondary" onclick="editNews(${news.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
+                <button class="btn-danger" onclick="deleteNews(${news.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function deleteNews(id) {
+    if (confirm('آیا از حذف این خبر مطمئن هستید؟')) {
+        newsData = newsData.filter(n => n.id !== id);
+        saveData('masjedNews', newsData);
+        renderNewsList();
+        updateStats();
+        if (editingNewsId === id) cancelNewsEdit();
+    }
+}
+
+function editNews(id) {
+    const news = newsData.find(n => n.id === id);
+    if (!news) return;
+    editingNewsId = id;
+    document.getElementById('adminNewsTitle').value = news.title;
+    document.getElementById('adminNewsCategory').value = news.category;
+    document.getElementById('adminNewsContent').value = news.content;
+    document.getElementById('adminNewsDate').value = news.date || '';
+    document.getElementById('adminNewsImage').value = news.image || '';
+    document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش خبر';
+    document.getElementById('adminEditNewsId').value = id;
+    document.getElementById('panel-news').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelNewsEdit() {
+    editingNewsId = null;
+    document.getElementById('adminNewsTitle').value = '';
+    document.getElementById('adminNewsCategory').value = 'مذهبی';
+    document.getElementById('adminNewsContent').value = '';
+    document.getElementById('adminNewsDate').value = '';
+    document.getElementById('adminNewsImage').value = '';
+    document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره خبر';
+    document.getElementById('adminEditNewsId').value = '';
+}
+
+document.getElementById('adminSaveNewsBtn')?.addEventListener('click', function() {
+    const title = document.getElementById('adminNewsTitle').value.trim();
+    const category = document.getElementById('adminNewsCategory').value;
+    const content = document.getElementById('adminNewsContent').value.trim();
+    const date = document.getElementById('adminNewsDate').value.trim();
+    const image = document.getElementById('adminNewsImage').value.trim();
+
+    if (!title || !content) {
+        alert('لطفاً عنوان و متن خبر را پر کنید.');
+        return;
+    }
+
+    const editId = parseInt(document.getElementById('adminEditNewsId').value);
+
+    if (editId) {
+        const index = newsData.findIndex(n => n.id === editId);
+        if (index !== -1) {
+            newsData[index] = { ...newsData[index], title, category, content, date: date || 'تاریخ نامشخص', image };
         }
+        cancelNewsEdit();
+    } else {
+        const newNews = { id: Date.now(), title, category, content, date: date || 'تاریخ نامشخص', image };
+        newsData.push(newNews);
+    }
 
-        async function saveData() {
-            try {
-                const response = await fetch(JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_API_KEY
-                    },
-                    body: JSON.stringify(data)
-                });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                localStorage.setItem('masjedData', JSON.stringify(data));
-                return true;
-            } catch (error) {
-                console.error('خطا در ذخیره داده:', error);
-                localStorage.setItem('masjedData', JSON.stringify(data));
-                return false;
-            }
+    saveData('masjedNews', newsData);
+    renderNewsList();
+    updateStats();
+    alert(editId ? '✅ خبر با موفقیت ویرایش شد.' : '✅ خبر با موفقیت اضافه شد.');
+    cancelNewsEdit();
+});
+
+// ===== مدیریت رویدادها =====
+function renderEventsList() {
+    const tbody = document.getElementById('adminEventsList');
+    if (!tbody) return;
+    if (eventsData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">رویدادی موجود نیست.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = eventsData.map(event => `
+        <tr>
+            <td>${event.title}</td>
+            <td>${event.date || 'نامشخص'}</td>
+            <td>${event.hasRegistration ? '✅ فعال' : '❌ غیرفعال'}</td>
+            <td>
+                <button class="btn-secondary" onclick="editEvent(${event.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
+                <button class="btn-danger" onclick="deleteEvent(${event.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function deleteEvent(id) {
+    if (confirm('آیا از حذف این رویداد مطمئن هستید؟')) {
+        eventsData = eventsData.filter(e => e.id !== id);
+        saveData('masjedEvents', eventsData);
+        renderEventsList();
+        updateStats();
+        if (editingEventId === id) cancelEventEdit();
+    }
+}
+
+function editEvent(id) {
+    const event = eventsData.find(e => e.id === id);
+    if (!event) return;
+    editingEventId = id;
+    document.getElementById('adminEventTitle').value = event.title;
+    document.getElementById('adminEventDate').value = event.date || '';
+    document.getElementById('adminEventTime').value = event.time || '';
+    document.getElementById('adminEventLocation').value = event.location || '';
+    document.getElementById('adminEventDesc').value = event.desc || '';
+    document.getElementById('adminEventImage').value = event.image || '';
+    document.getElementById('adminEventHasRegistration').checked = event.hasRegistration || false;
+    document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش رویداد';
+    document.getElementById('adminEditEventId').value = id;
+    document.getElementById('panel-events').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEventEdit() {
+    editingEventId = null;
+    document.getElementById('adminEventTitle').value = '';
+    document.getElementById('adminEventDate').value = '';
+    document.getElementById('adminEventTime').value = '';
+    document.getElementById('adminEventLocation').value = '';
+    document.getElementById('adminEventDesc').value = '';
+    document.getElementById('adminEventImage').value = '';
+    document.getElementById('adminEventHasRegistration').checked = false;
+    document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره رویداد';
+    document.getElementById('adminEditEventId').value = '';
+}
+
+document.getElementById('adminSaveEventBtn')?.addEventListener('click', function() {
+    const title = document.getElementById('adminEventTitle').value.trim();
+    const date = document.getElementById('adminEventDate').value.trim();
+    const time = document.getElementById('adminEventTime').value.trim();
+    const location = document.getElementById('adminEventLocation').value.trim();
+    const desc = document.getElementById('adminEventDesc').value.trim();
+    const image = document.getElementById('adminEventImage').value.trim();
+    const hasRegistration = document.getElementById('adminEventHasRegistration').checked;
+
+    if (!title || !desc) {
+        alert('لطفاً عنوان و توضیحات رویداد را پر کنید.');
+        return;
+    }
+
+    const editId = parseInt(document.getElementById('adminEditEventId').value);
+
+    if (editId) {
+        const index = eventsData.findIndex(e => e.id === editId);
+        if (index !== -1) {
+            eventsData[index] = { ...eventsData[index], title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration };
         }
+        cancelEventEdit();
+    } else {
+        const newEvent = { id: Date.now(), title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration };
+        eventsData.push(newEvent);
+    }
 
-        function getNews() { return data.news || []; }
+    saveData('masjedEvents', eventsData);
+    renderEventsList();
+    updateStats();
+    alert(editId ? '✅ رویداد با موفقیت ویرایش شد.' : '✅ رویداد با موفقیت اضافه شد.');
+    cancelEventEdit();
+});
 
-        function getEvents() { return data.events || []; }
+// ===== ثبت‌نام‌ها =====
+function renderRegistrationsList() {
+    const tbody = document.getElementById('adminRegistrationsList');
+    if (!tbody) return;
+    if (registrationsData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-msg">هیچ ثبت‌نامی انجام نشده است.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = registrationsData.map(reg => `
+        <tr>
+            <td>${reg.eventTitle || 'نامشخص'}</td>
+            <td>${reg.fullName}</td>
+            <td>${reg.nationalCode}</td>
+            <td>${reg.phone}</td>
+            <td>${reg.fatherName}</td>
+            <td>${reg.birthDate}</td>
+            <td>${reg.registeredAt || 'نامشخص'}</td>
+        </tr>
+    `).join('');
+}
 
-        function getGallery() { return data.gallery || []; }
+document.getElementById('refreshRegistrationsBtn')?.addEventListener('click', function() {
+    registrationsData = loadData('masjedRegistrations', []);
+    renderRegistrationsList();
+    updateStats();
+    alert('✅ لیست ثبت‌نام‌ها بازخوانی شد.');
+});
 
-        function getSettings() { return data.settings || { imam: '', phone: '' }; }
+// ===== خروجی اکسل =====
+document.getElementById('exportExcelBtn')?.addEventListener('click', function() {
+    if (registrationsData.length === 0) {
+        alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
+        return;
+    }
+    const headers = ['رویداد', 'نام و نام‌خانوادگی', 'کد ملی', 'تلفن', 'نام پدر', 'تاریخ تولد', 'تاریخ ثبت'];
+    const rows = registrationsData.map(reg => [
+        reg.eventTitle || '',
+        reg.fullName || '',
+        reg.nationalCode || '',
+        reg.phone || '',
+        reg.fatherName || '',
+        reg.birthDate || '',
+        reg.registeredAt || ''
+    ]);
+    let csvContent = headers.join(',') + '\n';
+    rows.forEach(row => { csvContent += row.join(',') + '\n'; });
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `ثبت_نام_مسجد_${new Date().toLocaleDateString('fa-IR')}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+});
 
-        function getRegistrations() { return data.registrations || []; }
+// ===== خروجی PDF =====
+document.getElementById('exportPdfBtn')?.addEventListener('click', function() {
+    if (registrationsData.length === 0) {
+        alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
+        return;
+    }
+    let htmlContent = `
+        <html dir="rtl">
+        <head><meta charset="UTF-8">
+        <style>
+            body { font-family: 'Vazir', Tahoma, sans-serif; padding: 20px; }
+            h2 { color: #1a5c3a; text-align: center; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th { background: #c9a84c; color: #1a1a1a; padding: 10px; border: 1px solid #ddd; }
+            td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+        </style>
+        </head>
+        <body>
+            <h2>📋 لیست ثبت‌نام‌های مسجد امام حسن مجتبی (ع)</h2>
+            <p>تاریخ: ${new Date().toLocaleDateString('fa-IR')}</p>
+            <table>
+                <thead><tr><th>رویداد</th><th>نام و نام‌خانوادگی</th><th>کد ملی</th><th>تلفن</th><th>نام پدر</th><th>تاریخ تولد</th><th>تاریخ ثبت</th></tr></thead>
+                <tbody>
+    `;
+    registrationsData.forEach(reg => {
+        htmlContent += `
+            <tr>
+                <td>${reg.eventTitle || ''}</td>
+                <td>${reg.fullName || ''}</td>
+                <td>${reg.nationalCode || ''}</td>
+                <td>${reg.phone || ''}</td>
+                <td>${reg.fatherName || ''}</td>
+                <td>${reg.birthDate || ''}</td>
+                <td>${reg.registeredAt || ''}</td>
+            </tr>
+        `;
+    });
+    htmlContent += `
+                </tbody>
+            </table>
+            <p style="margin-top:30px; color:#8a7a6a; text-align:center;">این فایل به صورت خودکار از پنل مدیریت مسجد تولید شده است.</p>
+        </body>
+        </html>
+    `;
+    const win = window.open('', '_blank');
+    win.document.write(htmlContent);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 500);
+});
 
-        function getUrgentNotice() { return data.urgentNotice || { text: '', active: false }; }
+// ===== گالری =====
+function renderGalleryList() {
+    const container = document.getElementById('adminGalleryList');
+    if (!container) return;
+    if (galleryData.length === 0) {
+        container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
+        return;
+    }
+    container.innerHTML = galleryData.map(item => `
+        <div style="background:var(--bg-card); border-radius:12px; padding:0.5rem; text-align:center; border:1px solid var(--card-border-color);">
+            <img src="${item.image}" alt="${item.title}" style="width:100%; height:120px; object-fit:cover; border-radius:8px;" loading="lazy" />
+            <p style="font-size:0.8rem; margin:0.3rem 0; color:var(--dark);">${item.title || 'بدون عنوان'}</p>
+            <button class="btn-danger" onclick="deleteGalleryItem(${item.id})" style="padding:0.2rem 0.8rem; font-size:0.7rem;"><i class="fas fa-trash"></i></button>
+        </div>
+    `).join('');
+}
 
-        // ===== ورود به پنل =====
-        const loginOverlay = document.getElementById('loginOverlay');
-        const loginPassword = document.getElementById('adminLoginPassword');
-        const loginConfirmBtn = document.getElementById('loginConfirmBtn');
+function deleteGalleryItem(id) {
+    if (confirm('آیا از حذف این تصویر مطمئن هستید؟')) {
+        galleryData = galleryData.filter(g => g.id !== id);
+        saveData('masjedGallery', galleryData);
+        renderGalleryList();
+        updateStats();
+    }
+}
 
-        function checkLoginStatus() {
-            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                loadAllData();
-                updateStats();
-                return true;
-            }
-            return false;
-        }
+document.getElementById('adminSaveGalleryBtn')?.addEventListener('click', function() {
+    const title = document.getElementById('adminGalleryTitle').value.trim();
+    const image = document.getElementById('adminGalleryImage').value.trim();
+    if (!image) {
+        alert('لطفاً لینک تصویر را وارد کنید.');
+        return;
+    }
+    const newItem = { id: Date.now(), title: title || 'تصویر', image };
+    galleryData.push(newItem);
+    saveData('masjedGallery', galleryData);
+    renderGalleryList();
+    updateStats();
+    document.getElementById('adminGalleryTitle').value = '';
+    document.getElementById('adminGalleryImage').value = '';
+    alert('✅ تصویر با موفقیت اضافه شد.');
+});
 
-        loginConfirmBtn?.addEventListener('click', function() {
-            if (loginPassword.value.trim() === ADMIN_PASSWORD) {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                loadAllData();
-                updateStats();
-                loginPassword.value = '';
-            } else {
-                alert('❌ رمز عبور اشتباه است!');
-                loginPassword.value = '';
-                loginPassword.focus();
-            }
-        });
+// ===== اطلاعیه فوری =====
+function loadNotice() {
+    document.getElementById('adminNoticeText').value = urgentNoticeData.text || '';
+    document.getElementById('adminNoticeActive').checked = urgentNoticeData.active !== false;
+}
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !loginOverlay.classList.contains('hidden')) {
-                loginConfirmBtn?.click();
-            }
-        });
+document.getElementById('adminSaveNoticeBtn')?.addEventListener('click', function() {
+    const text = document.getElementById('adminNoticeText').value.trim();
+    const active = document.getElementById('adminNoticeActive').checked;
+    if (!text) {
+        alert('لطفاً متن اطلاعیه را وارد کنید.');
+        return;
+    }
+    urgentNoticeData.text = text;
+    urgentNoticeData.active = active;
+    saveData('masjedUrgentNotice', urgentNoticeData);
+    alert('✅ اطلاعیه با موفقیت ذخیره شد.');
+});
 
-        function logout() {
-            if (confirm('آیا از خروج از پنل مدیریت مطمئن هستید؟')) {
-                document.getElementById('adminContainer').style.display = 'none';
-                loginOverlay.classList.remove('hidden');
-                loginPassword.value = '';
-                sessionStorage.removeItem('adminLoggedIn');
-                localStorage.removeItem('adminLoggedIn');
-            }
-        }
+// ===== تنظیمات =====
+function loadSettings() {
+    document.getElementById('adminSettingsImam').value = settingsData.imam || '';
+    document.getElementById('adminSettingsPhone').value = settingsData.phone || '';
+}
 
-        // ===== ناوبری =====
-        document.querySelectorAll('.menu-item[data-panel]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.menu-item[data-panel]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const panel = this.dataset.panel;
-                document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById(`panel-${panel}`).classList.add('active');
-            });
-        });
+document.getElementById('adminSaveSettingsBtn')?.addEventListener('click', function() {
+    const imam = document.getElementById('adminSettingsImam').value.trim();
+    const phone = document.getElementById('adminSettingsPhone').value.trim();
+    if (!imam || !phone) {
+        alert('لطفاً هر دو فیلد را پر کنید.');
+        return;
+    }
+    settingsData.imam = imam;
+    settingsData.phone = phone;
+    saveData('masjedSettings', settingsData);
+    alert('✅ تنظیمات با موفقیت ذخیره شد.');
+});
 
-        // ===== بارگذاری داده‌ها =====
-        async function loadAllData() {
-            await fetchData();
-            renderNewsList();
-            renderEventsList();
-            renderRegistrationsList();
-            renderGalleryList();
-            loadSettings();
-            loadNotice();
-        }
+// ===== مقداردهی اولیه =====
+document.addEventListener('DOMContentLoaded', function() {
+    // ابتدا از sessionStorage و سپس از localStorage بررسی کن
+    if (sessionStorage.getItem('adminLoggedIn') === 'true' || localStorage.getItem('adminLoggedIn') === 'true') {
+        loginOverlay.classList.add('hidden');
+        document.getElementById('adminContainer').style.display = 'flex';
+        loadAllData();
+        updateStats();
+        // برای اطمینان، sessionStorage را هم تنظیم کن
+        sessionStorage.setItem('adminLoggedIn', 'true');
+    }
+});
 
-        function updateStats() {
-            document.getElementById('statNews').textContent = getNews().length;
-            document.getElementById('statEvents').textContent = getEvents().length;
-            document.getElementById('statRegistrations').textContent = getRegistrations().length;
-            document.getElementById('statGallery').textContent = getGallery().length;
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
-        }
-
-        // ===== آپلود تصویر =====
-        function uploadImageToBase64(input, targetId) {
-            if (!input.files || !input.files[0]) return;
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById(targetId).value = e.target.result;
-                alert('✅ تصویر با موفقیت بارگذاری شد.');
-            };
-            reader.readAsDataURL(file);
-        }
-        window.uploadImageToBase64 = uploadImageToBase64;
-
-        // ===== مدیریت اخبار =====
-        function renderNewsList() {
-            const tbody = document.getElementById('adminNewsList');
-            if (!tbody) return;
-            const news = getNews();
-            if (news.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">خبری موجود نیست.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = news.map(n => `
-                <tr>
-                    <td>${n.title}</td>
-                    <td>${n.category}</td>
-                    <td>${n.date || 'نامشخص'}</td>
-                    <td>
-                        <button class="btn-secondary" onclick="editNews(${n.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
-                        <button class="btn-danger" onclick="deleteNews(${n.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        async function deleteNews(id) {
-            if (confirm('آیا از حذف این خبر مطمئن هستید؟')) {
-                let news = getNews();
-                news = news.filter(n => n.id !== id);
-                data.news = news;
-                await saveData();
-                renderNewsList();
-                updateStats();
-                if (editingNewsId === id) cancelNewsEdit();
-            }
-        }
-
-        function editNews(id) {
-            const news = getNews().find(n => n.id === id);
-            if (!news) return;
-            editingNewsId = id;
-            document.getElementById('adminNewsTitle').value = news.title;
-            document.getElementById('adminNewsCategory').value = news.category;
-            document.getElementById('adminNewsContent').value = news.content;
-            document.getElementById('adminNewsDate').value = news.date || '';
-            document.getElementById('adminNewsImage').value = news.image || '';
-            document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش خبر';
-            document.getElementById('adminEditNewsId').value = id;
-            document.getElementById('panel-news').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelNewsEdit() {
-            editingNewsId = null;
-            document.getElementById('adminNewsTitle').value = '';
-            document.getElementById('adminNewsCategory').value = 'مذهبی';
-            document.getElementById('adminNewsContent').value = '';
-            document.getElementById('adminNewsDate').value = '';
-            document.getElementById('adminNewsImage').value = '';
-            document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره خبر';
-            document.getElementById('adminEditNewsId').value = '';
-        }
-
-        document.getElementById('adminSaveNewsBtn')?.addEventListener('click', async function() {
-            const title = document.getElementById('adminNewsTitle').value.trim();
-            const category = document.getElementById('adminNewsCategory').value;
-            const content = document.getElementById('adminNewsContent').value.trim();
-            const date = document.getElementById('adminNewsDate').value.trim();
-            const image = document.getElementById('adminNewsImage').value.trim();
-
-            if (!title || !content) {
-                alert('لطفاً عنوان و متن خبر را پر کنید.');
-                return;
-            }
-
-            const editId = parseInt(document.getElementById('adminEditNewsId').value);
-            let news = getNews();
-
-            if (editId) {
-                const index = news.findIndex(n => n.id === editId);
-                if (index !== -1) {
-                    news[index] = { ...news[index], title, category, content, date: date || 'تاریخ نامشخص', image };
-                }
-                cancelNewsEdit();
-            } else {
-                news.push({ id: Date.now(), title, category, content, date: date || 'تاریخ نامشخص', image });
-            }
-
-            data.news = news;
-            await saveData();
-            renderNewsList();
-            updateStats();
-            alert(editId ? '✅ خبر با موفقیت ویرایش شد.' : '✅ خبر با موفقیت اضافه شد.');
-            cancelNewsEdit();
-        });
-
-        // ===== مدیریت رویدادها =====
-        function renderEventsList() {
-            const tbody = document.getElementById('adminEventsList');
-            if (!tbody) return;
-            const events = getEvents();
-            if (events.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">رویدادی موجود نیست.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = events.map(e => `
-                <tr>
-                    <td>${e.title}</td>
-                    <td>${e.date || 'نامشخص'}</td>
-                    <td>${e.hasRegistration ? '✅ فعال' : '❌ غیرفعال'}</td>
-                    <td>
-                        <button class="btn-secondary" onclick="editEvent(${e.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
-                        <button class="btn-danger" onclick="deleteEvent(${e.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        async function deleteEvent(id) {
-            if (confirm('آیا از حذف این رویداد مطمئن هستید؟')) {
-                let events = getEvents();
-                events = events.filter(e => e.id !== id);
-                data.events = events;
-                await saveData();
-                renderEventsList();
-                updateStats();
-                if (editingEventId === id) cancelEventEdit();
-            }
-        }
-
-        function editEvent(id) {
-            const event = getEvents().find(e => e.id === id);
-            if (!event) return;
-            editingEventId = id;
-            document.getElementById('adminEventTitle').value = event.title;
-            document.getElementById('adminEventDate').value = event.date || '';
-            document.getElementById('adminEventTime').value = event.time || '';
-            document.getElementById('adminEventLocation').value = event.location || '';
-            document.getElementById('adminEventDesc').value = event.desc || '';
-            document.getElementById('adminEventImage').value = event.image || '';
-            document.getElementById('adminEventHasRegistration').checked = event.hasRegistration || false;
-            document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش رویداد';
-            document.getElementById('adminEditEventId').value = id;
-            document.getElementById('panel-events').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelEventEdit() {
-            editingEventId = null;
-            document.getElementById('adminEventTitle').value = '';
-            document.getElementById('adminEventDate').value = '';
-            document.getElementById('adminEventTime').value = '';
-            document.getElementById('adminEventLocation').value = '';
-            document.getElementById('adminEventDesc').value = '';
-            document.getElementById('adminEventImage').value = '';
-            document.getElementById('adminEventHasRegistration').checked = false;
-            document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره رویداد';
-            document.getElementById('adminEditEventId').value = '';
-        }
-
-        document.getElementById('adminSaveEventBtn')?.addEventListener('click', async function() {
-            const title = document.getElementById('adminEventTitle').value.trim();
-            const date = document.getElementById('adminEventDate').value.trim();
-            const time = document.getElementById('adminEventTime').value.trim();
-            const location = document.getElementById('adminEventLocation').value.trim();
-            const desc = document.getElementById('adminEventDesc').value.trim();
-            const image = document.getElementById('adminEventImage').value.trim();
-            const hasRegistration = document.getElementById('adminEventHasRegistration').checked;
-
-            if (!title || !desc) {
-                alert('لطفاً عنوان و توضیحات رویداد را پر کنید.');
-                return;
-            }
-
-            const editId = parseInt(document.getElementById('adminEditEventId').value);
-            let events = getEvents();
-
-            if (editId) {
-                const index = events.findIndex(e => e.id === editId);
-                if (index !== -1) {
-                    events[index] = { ...events[index], title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration };
-                }
-                cancelEventEdit();
-            } else {
-                events.push({ id: Date.now(), title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration });
-            }
-
-            data.events = events;
-            await saveData();
-            renderEventsList();
-            updateStats();
-            alert(editId ? '✅ رویداد با موفقیت ویرایش شد.' : '✅ رویداد با موفقیت اضافه شد.');
-            cancelEventEdit();
-        });
-
-        // ===== ثبت‌نام‌ها =====
-        function renderRegistrationsList() {
-            const tbody = document.getElementById('adminRegistrationsList');
-            if (!tbody) return;
-            const registrations = getRegistrations();
-            if (registrations.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="empty-msg">هیچ ثبت‌نامی انجام نشده است.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = registrations.map(reg => `
-                <tr>
-                    <td>${reg.eventTitle || 'نامشخص'}</td>
-                    <td>${reg.fullName}</td>
-                    <td>${reg.nationalCode}</td>
-                    <td>${reg.phone}</td>
-                    <td>${reg.fatherName}</td>
-                    <td>${reg.birthDate}</td>
-                    <td>${reg.registeredAt || 'نامشخص'}</td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('refreshRegistrationsBtn')?.addEventListener('click', function() {
-            renderRegistrationsList();
-            updateStats();
-            alert('✅ لیست ثبت‌نام‌ها بازخوانی شد.');
-        });
-
-        // ===== خروجی اکسل و PDF =====
-        document.getElementById('exportExcelBtn')?.addEventListener('click', function() {
-            const registrations = getRegistrations();
-            if (registrations.length === 0) {
-                alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
-                return;
-            }
-            const headers = ['رویداد', 'نام و نام‌خانوادگی', 'کد ملی', 'تلفن', 'نام پدر', 'تاریخ تولد', 'تاریخ ثبت'];
-            const rows = registrations.map(reg => [
-                reg.eventTitle || '', reg.fullName || '', reg.nationalCode || '',
-                reg.phone || '', reg.fatherName || '', reg.birthDate || '', reg.registeredAt || ''
-            ]);
-            let csvContent = headers.join(',') + '\n';
-            rows.forEach(row => { csvContent += row.join(',') + '\n'; });
-            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `ثبت_نام_مسجد_${new Date().toLocaleDateString('fa-IR')}.csv`;
-            link.click();
-            URL.revokeObjectURL(link.href);
-        });
-
-        document.getElementById('exportPdfBtn')?.addEventListener('click', function() {
-            const registrations = getRegistrations();
-            if (registrations.length === 0) {
-                alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
-                return;
-            }
-            let htmlContent = `
-                <html dir="rtl"><head><meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Vazir', Tahoma, sans-serif; padding: 20px; }
-                    h2 { color: #1a5c3a; text-align: center; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th { background: #c9a84c; color: #1a1a1a; padding: 10px; border: 1px solid #ddd; }
-                    td { padding: 8px; border: 1px solid #ddd; text-align: center; }
-                </style>
-                </head><body>
-                <h2>📋 لیست ثبت‌نام‌های مسجد امام حسن مجتبی (ع)</h2>
-                <p>تاریخ: ${new Date().toLocaleDateString('fa-IR')}</p>
-                <table>
-                    <thead><tr><th>رویداد</th><th>نام و نام‌خانوادگی</th><th>کد ملی</th><th>تلفن</th><th>نام پدر</th><th>تاریخ تولد</th><th>تاریخ ثبت</th></tr></thead>
-                    <tbody>
-            `;
-            registrations.forEach(reg => {
-                htmlContent += `
-                    <tr>
-                        <td>${reg.eventTitle || ''}</td>
-                        <td>${reg.fullName || ''}</td>
-                        <td>${reg.nationalCode || ''}</td>
-                        <td>${reg.phone || ''}</td>
-                        <td>${reg.fatherName || ''}</td>
-                        <td>${reg.birthDate || ''}</td>
-                        <td>${reg.registeredAt || ''}</td>
-                    </tr>
-                `;
-            });
-            htmlContent += `
-                    </tbody></table>
-                <p style="margin-top:30px; color:#8a7a6a; text-align:center;">این فایل به صورت خودکار از پنل مدیریت مسجد تولید شده است.</p>
-                </body></html>
-            `;
-            const win = window.open('', '_blank');
-            win.document.write(htmlContent);
-            win.document.close();
-            setTimeout(() => { win.print(); }, 500);
-        });
-
-        // ===== گالری =====
-        function renderGalleryList() {
-            const container = document.getElementById('adminGalleryList');
-            if (!container) return;
-            const gallery = getGallery();
-            if (gallery.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
-                return;
-            }
-            container.innerHTML = gallery.map(item => `
-                <div style="background:var(--bg-card); border-radius:12px; padding:0.5rem; text-align:center; border:1px solid var(--card-border-color);">
-                    <img src="${item.image}" alt="${item.title}" style="width:100%; height:120px; object-fit:cover; border-radius:8px;" loading="lazy" />
-                    <p style="font-size:0.8rem; margin:0.3rem 0; color:var(--dark);">${item.title || 'بدون عنوان'}</p>
-                    <button class="btn-danger" onclick="deleteGalleryItem(${item.id})" style="padding:0.2rem 0.8rem; font-size:0.7rem;"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        async function deleteGalleryItem(id) {
-            if (confirm('آیا از حذف این تصویر مطمئن هستید؟')) {
-                let gallery = getGallery();
-                gallery = gallery.filter(g => g.id !== id);
-                data.gallery = gallery;
-                await saveData();
-                renderGalleryList();
-                updateStats();
-            }
-        }
-
-        document.getElementById('adminSaveGalleryBtn')?.addEventListener('click', async function() {
-            const title = document.getElementById('adminGalleryTitle').value.trim();
-            const image = document.getElementById('adminGalleryImage').value.trim();
-            if (!image) {
-                alert('لطفاً لینک تصویر را وارد کنید.');
-                return;
-            }
-            const gallery = getGallery();
-            gallery.push({ id: Date.now(), title: title || 'تصویر', image });
-            data.gallery = gallery;
-            await saveData();
-            renderGalleryList();
-            updateStats();
-            document.getElementById('adminGalleryTitle').value = '';
-            document.getElementById('adminGalleryImage').value = '';
-            alert('✅ تصویر با موفقیت اضافه شد.');
-        });
-
-        // ===== اطلاعیه فوری =====
-        function loadNotice() {
-            const notice = getUrgentNotice();
-            document.getElementById('adminNoticeText').value = notice.text || '';
-            document.getElementById('adminNoticeActive').checked = notice.active !== false;
-        }
-
-        document.getElementById('adminSaveNoticeBtn')?.addEventListener('click', async function() {
-            const text = document.getElementById('adminNoticeText').value.trim();
-            const active = document.getElementById('adminNoticeActive').checked;
-            if (!text) {
-                alert('لطفاً متن اطلاعیه را وارد کنید.');
-                return;
-            }
-            data.urgentNotice = { text, active };
-            await saveData();
-            alert('✅ اطلاعیه با موفقیت ذخیره شد.');
-        });
-
-        // ===== تنظیمات =====
-        function loadSettings() {
-            const settings = getSettings();
-            document.getElementById('adminSettingsImam').value = settings.imam || '';
-            document.getElementById('adminSettingsPhone').value = settings.phone || '';
-        }
-
-        document.getElementById('adminSaveSettingsBtn')?.addEventListener('click', async function() {
-            const imam = document.getElementById('adminSettingsImam').value.trim();
-            const phone = document.getElementById('adminSettingsPhone').value.trim();
-            if (!imam || !phone) {
-                alert('لطفاً هر دو فیلد را پر کنید.');
-                return;
-            }
-            data.settings = { imam, phone };
-            await saveData();
-            alert('✅ تنظیمات با موفقیت ذخیره شد.');
-        });
-
-        // ===== مقداردهی اولیه =====
-        document.addEventListener('DOMContentLoaded', function() {
-            if (sessionStorage.getItem('adminLoggedIn') === 'true' || localStorage.getItem('adminLoggedIn') === 'true') {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                loadAllData();
-                updateStats();
-            }
-        });
-
-        window.logout = logout;
-        window.deleteNews = deleteNews;
-        window.editNews = editNews;
-        window.deleteEvent = deleteEvent;
-        window.editEvent = editEvent;
-        window.deleteGalleryItem = deleteGalleryItem;
+// توابع سراسری
+window.logout = logout;
+window.deleteNews = deleteNews;
+window.editNews = editNews;
+window.deleteEvent = deleteEvent;
+window.editEvent = editEvent;
+window.deleteGalleryItem = deleteGalleryItem;
     </script>
 </body>
 </html>

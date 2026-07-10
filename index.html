@@ -1171,123 +1171,103 @@
 
     <script>
         // ============================================================
-        // JavaScript - مسجد امام حسن مجتبی (ع) - با JSONBin
+        // JavaScript - مسجد امام حسن مجتبی (ع) - صفحه اصلی
         // ============================================================
 
-        // ===== تنظیمات JSONBin (به‌روز شده) =====
-        const JSONBIN_BIN_ID = '6a50d675f5f4af5e297c5eb0';
-        const JSONBIN_API_KEY = '$2a$10$AcpQK8sVCDavht9FpStrdebFDt722OKmtJzP.OHtgohN32YoVoOMK';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        // ===== داده‌های نمونه =====
+        const defaultNews = [{
+            id: 1,
+            title: 'برگزاری مراسم عزاداری دهه اول محرم',
+            category: 'مذهبی',
+            content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از اول تا دهم محرم هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود. سخنران: حجت‌الاسلام والمسلمین رضایی',
+            date: '۱۴۰۴/۰۴/۰۱',
+            image: ''
+        }, {
+            id: 2,
+            title: 'کلاس های تفسیر قرآن کریم آغاز شد',
+            category: 'فرهنگی',
+            content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ با حضور حجت‌الاسلام والمسلمین رضایی برگزار می‌شود. شرکت برای عموم آزاد است.',
+            date: '۱۴۰۴/۰۳/۲۵',
+            image: ''
+        }, {
+            id: 3,
+            title: 'تعمیرات و بهسازی شبستان مسجد',
+            category: 'اطلاعیه',
+            content: 'به اطلاع نمازگزاران عزیز می‌رساند، شبستان مسجد از تاریخ ۱۴۰۴/۰۴/۱۰ تا ۱۴۰۴/۰۴/۲۰ به مدت ۱۰ روز جهت تعمیرات و بهسازی تعطیل خواهد بود. نمازهای جماعت در فضای باز حیاط مسجد برگزار می‌شود.',
+            date: '۱۴۰۴/۰۳/۲۰',
+            image: ''
+        }];
 
-        // ===== داده‌های پیش‌فرض =====
-        const defaultData = {
-            news: [
-                { id: 1, title: 'برگزاری مراسم عزاداری دهه اول محرم', category: 'مذهبی', content: 'مراسم عزاداری سرور و سالار شهیدان...', date: '۱۴۰۴/۰۴/۰۱', image: '' },
-                { id: 2, title: 'کلاس های تفسیر قرآن کریم آغاز شد', category: 'فرهنگی', content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ برگزار می‌شود.', date: '۱۴۰۴/۰۳/۲۵', image: '' }
-            ],
-            events: [
-                { id: 1, title: 'جشن نیمه شعبان', date: '۱۴۰۴/۰۴/۱۵', time: '۱۹:۰۰', location: 'شبستان مسجد', desc: 'جشن میلاد با سعادت حضرت مهدی (عج)...', hasRegistration: true, image: '' }
-            ],
-            gallery: [
-                { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' }
-            ],
-            settings: {
-                imam: 'حجت‌الاسلام والمسلمین کاظم‌زاده',
-                phone: '۰۳۱-۵۵۵۵۱۲۳۴'
-            },
-            registrations: [],
-            urgentNotice: {
-                text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
-                active: true
+        const defaultEvents = [{
+            id: 1,
+            title: 'جشن نیمه شعبان',
+            date: '۱۴۰۴/۰۴/۱۵',
+            time: '۱۹:۰۰',
+            location: 'شبستان مسجد',
+            desc: 'جشن میلاد با سعادت حضرت مهدی (عج) همراه با سخنرانی، مدیحه‌سرایی و پذیرایی',
+            hasRegistration: true,
+            image: ''
+        }, {
+            id: 2,
+            title: 'دوره آموزشی احکام و اخلاق',
+            date: '۱۴۰۴/۰۴/۲۰',
+            time: '۱۶:۰۰',
+            location: 'سالن اجتماعات مسجد',
+            desc: 'دوره آموزشی احکام روزه، نماز و اخلاق اسلامی ویژه برادران و خواهران',
+            hasRegistration: false,
+            image: ''
+        }];
+
+        const defaultGallery = [
+            { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' },
+            { id: 2, title: 'کلاس تفسیر', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=کلاس+تفسیر' }
+        ];
+
+        // ===== بارگذاری داده‌ها =====
+        function loadData(key, defaultData) {
+            const stored = localStorage.getItem(key);
+            if (stored) {
+                try { return JSON.parse(stored); } catch (e) { return defaultData; }
             }
-        };
-
-        let data = {};
-
-        // ===== توابع داده =====
-        async function fetchData() {
-            try {
-                const response = await fetch(JSONBIN_URL, {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const result = await response.json();
-                const record = result.record || result;
-                if (!record || Object.keys(record).length === 0) {
-                    data = JSON.parse(JSON.stringify(defaultData));
-                    await saveData();
-                } else {
-                    data = { ...JSON.parse(JSON.stringify(defaultData)), ...record };
-                    for (const key of Object.keys(defaultData)) {
-                        if (!data[key]) data[key] = JSON.parse(JSON.stringify(defaultData[key]));
-                    }
-                }
-                return data;
-            } catch (error) {
-                console.error('خطا در خواندن داده:', error);
-                const fallback = localStorage.getItem('masjedData');
-                if (fallback) {
-                    try { data = JSON.parse(fallback); } catch (e) { data = JSON.parse(JSON.stringify(defaultData)); }
-                } else {
-                    data = JSON.parse(JSON.stringify(defaultData));
-                }
-                return data;
-            }
+            return defaultData;
         }
 
-        async function saveData() {
-            try {
-                const response = await fetch(JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_API_KEY
-                    },
-                    body: JSON.stringify(data)
-                });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                localStorage.setItem('masjedData', JSON.stringify(data));
-                return true;
-            } catch (error) {
-                console.error('خطا در ذخیره داده:', error);
-                localStorage.setItem('masjedData', JSON.stringify(data));
-                return false;
-            }
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
         }
 
-        function getNews() { return data.news || []; }
+        let newsData = loadData('masjedNews', defaultNews);
+        let eventsData = loadData('masjedEvents', defaultEvents);
+        let galleryData = loadData('masjedGallery', defaultGallery);
+        let settingsData = loadData('masjedSettings', {
+            imam: 'حجت‌الاسلام والمسلمین رضایی',
+            phone: '۰۳۱-۵۵۵۵۱۲۳۴'
+        });
+        let registrationsData = loadData('masjedRegistrations', []);
+        let urgentNoticeData = loadData('masjedUrgentNotice', {
+            text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
+            active: true
+        });
 
-        function getEvents() { return data.events || []; }
-
-        function getGallery() { return data.gallery || []; }
-
-        function getSettings() { return data.settings || { imam: '', phone: '' }; }
-
-        function getRegistrations() { return data.registrations || []; }
-
-        function getUrgentNotice() { return data.urgentNotice || { text: '', active: false }; }
-
-        // ===== به‌روزرسانی تنظیمات در صفحه =====
+        // ===== به‌روزرسانی تنظیمات =====
         function applySettings() {
-            const settings = getSettings();
             const imamDisplay = document.getElementById('imamDisplay');
             const phoneDisplay = document.getElementById('phoneDisplay');
             const imamInfo = document.getElementById('imamInfo');
             const contactPhone = document.getElementById('contactPhone');
 
-            if (imamDisplay) imamDisplay.textContent = `👤 امام جماعت: ${settings.imam}`;
-            if (phoneDisplay) phoneDisplay.textContent = `📞 خادم مسجد: ${settings.phone}`;
-            if (imamInfo) imamInfo.innerHTML = `<strong>امام جماعت:</strong> ${settings.imam}`;
-            if (contactPhone) contactPhone.innerHTML = `<strong>شماره تماس خادم مسجد:</strong> ${settings.phone}`;
+            if (imamDisplay) imamDisplay.textContent = `👤 امام جماعت: ${settingsData.imam}`;
+            if (phoneDisplay) phoneDisplay.textContent = `📞 خادم مسجد: ${settingsData.phone}`;
+            if (imamInfo) imamInfo.innerHTML = `<strong>امام جماعت:</strong> ${settingsData.imam}`;
+            if (contactPhone) contactPhone.innerHTML = `<strong>شماره تماس خادم مسجد:</strong> ${settingsData.phone}`;
         }
 
         // ===== مدیریت مودال اطلاعیه =====
         function loadNoticeModal() {
-            const notice = getUrgentNotice();
             const modal = document.getElementById('noticeModal');
             const text = document.getElementById('noticeModalText');
-            if (notice.active && notice.text) {
-                text.textContent = notice.text;
+            if (urgentNoticeData.active && urgentNoticeData.text) {
+                text.textContent = urgentNoticeData.text;
                 modal.classList.add('show');
             } else {
                 modal.classList.remove('show');
@@ -1320,10 +1300,18 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                if (document.getElementById('lightboxOverlay').classList.contains('open')) closeLightbox();
-                if (document.getElementById('sidebar').classList.contains('open')) closeSidebar();
-                if (document.getElementById('registerModal').classList.contains('open')) closeRegisterModal();
-                if (document.getElementById('noticeModal').classList.contains('show')) closeNoticeModal();
+                if (document.getElementById('lightboxOverlay').classList.contains('open')) {
+                    closeLightbox();
+                }
+                if (document.getElementById('sidebar').classList.contains('open')) {
+                    closeSidebar();
+                }
+                if (document.getElementById('registerModal').classList.contains('open')) {
+                    closeRegisterModal();
+                }
+                if (document.getElementById('noticeModal').classList.contains('show')) {
+                    closeNoticeModal();
+                }
             }
         });
 
@@ -1333,20 +1321,19 @@
             if (!container) return;
             container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
 
-            const news = getNews();
-            if (news.length === 0) {
+            if (newsData.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted);">هنوز خبری ثبت نشده است.</p>`;
                 return;
             }
 
-            container.innerHTML = news.map(newsItem => `
+            container.innerHTML = newsData.map(news => `
                 <div class="news-card">
-                    ${newsItem.image ? `<img src="${newsItem.image}" class="news-image" alt="${newsItem.title}" onclick="event.stopPropagation(); openLightbox('${newsItem.image}')" />` : ''}
-                    <span class="category">${newsItem.category}</span>
-                    <h4>${newsItem.title}</h4>
-                    <p style="font-size:0.95rem; color:var(--text-muted);">${newsItem.content.substring(0, 120)}${newsItem.content.length > 120 ? '...' : ''}</p>
+                    ${news.image ? `<img src="${news.image}" class="news-image" alt="${news.title}" onclick="event.stopPropagation(); openLightbox('${news.image}')" />` : ''}
+                    <span class="category">${news.category}</span>
+                    <h4>${news.title}</h4>
+                    <p style="font-size:0.95rem; color:var(--text-muted);">${news.content.substring(0, 120)}${news.content.length > 120 ? '...' : ''}</p>
                     <div class="meta">
-                        <span><i class="far fa-calendar-alt"></i> ${newsItem.date || 'تاریخ نامشخص'}</span>
+                        <span><i class="far fa-calendar-alt"></i> ${news.date || 'تاریخ نامشخص'}</span>
                     </div>
                 </div>
             `).join('');
@@ -1358,13 +1345,12 @@
             if (!container) return;
             container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
 
-            const events = getEvents();
-            if (events.length === 0) {
+            if (eventsData.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted);">هنوز رویدادی ثبت نشده است.</p>`;
                 return;
             }
 
-            container.innerHTML = events.map(event => `
+            container.innerHTML = eventsData.map(event => `
                 <div class="event-card" id="event-${event.id}">
                     ${event.image ? `<img src="${event.image}" class="event-image" alt="${event.title}" onclick="event.stopPropagation(); openLightbox('${event.image}')" />` : ''}
                     <div class="date"><i class="far fa-calendar-alt"></i> ${event.date || 'تاریخ نامشخص'} ${event.time ? `<i class="far fa-clock"></i> ${event.time}` : ''}</div>
@@ -1383,13 +1369,12 @@
             const container = document.getElementById('galleryContainer');
             if (!container) return;
 
-            const gallery = getGallery();
-            if (gallery.length === 0) {
+            if (galleryData.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
                 return;
             }
 
-            container.innerHTML = gallery.map(item => `
+            container.innerHTML = galleryData.map(item => `
                 <div class="gallery-item" onclick="openLightbox('${item.image}')">
                     <img src="${item.image}" alt="${item.title}" loading="lazy" />
                     <div class="gallery-title">${item.title || 'بدون عنوان'}</div>
@@ -1405,8 +1390,7 @@
 
         function openRegisterModal(eventId) {
             currentEventId = eventId;
-            const events = getEvents();
-            const event = events.find(e => e.id === eventId);
+            const event = eventsData.find(e => e.id === eventId);
             if (!event) return;
 
             document.getElementById('registerModalTitle').textContent = `📝 ثبت‌نام در رویداد: ${event.title}`;
@@ -1433,7 +1417,7 @@
         });
 
         // ===== ثبت‌نام =====
-        document.getElementById('registerSubmitBtn')?.addEventListener('click', async function() {
+        document.getElementById('registerSubmitBtn')?.addEventListener('click', function() {
             const fullName = document.getElementById('regFullName').value.trim();
             const nationalCode = document.getElementById('regNationalCode').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
@@ -1450,12 +1434,10 @@
                 return;
             }
 
-            const events = getEvents();
-            const event = events.find(e => e.id === currentEventId);
+            const event = eventsData.find(e => e.id === currentEventId);
             if (!event) return;
 
-            const registrations = getRegistrations();
-            const newRegistration = {
+            const registration = {
                 id: Date.now(),
                 eventId: currentEventId,
                 eventTitle: event.title,
@@ -1467,9 +1449,8 @@
                 registeredAt: new Date().toLocaleDateString('fa-IR')
             };
 
-            registrations.push(newRegistration);
-            data.registrations = registrations;
-            await saveData();
+            registrationsData.push(registration);
+            saveData('masjedRegistrations', registrationsData);
 
             registerFormContainer.style.display = 'none';
             registerSuccessMessage.style.display = 'block';
@@ -1601,22 +1582,21 @@
         });
 
         // ===== مقداردهی اولیه =====
-        document.addEventListener('DOMContentLoaded', async function() {
-            const skeletons = document.querySelectorAll('.skeleton-loading');
-
-            await fetchData();
-
+        document.addEventListener('DOMContentLoaded', function() {
             applySettings();
             renderNews();
             renderEvents();
             renderGallery();
-            loadNoticeModal();
+            requestNotificationPermission();
 
             setTimeout(() => {
-                skeletons.forEach(el => el.remove());
-            }, 500);
+                document.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
+            }, 1000);
 
-            requestNotificationPermission();
+            // نمایش مودال اطلاعیه بعد از 0.5 ثانیه
+            setTimeout(() => {
+                loadNoticeModal();
+            }, 500);
 
             setTimeout(() => {
                 const toast = document.createElement('div');
@@ -1639,7 +1619,7 @@
                     toast.style.transform = 'translateY(30px)';
                     setTimeout(() => toast.remove(), 600);
                 }, 4000);
-            }, 1000);
+            }, 800);
         });
 
         // ===== توابع سراسری =====
@@ -1647,14 +1627,6 @@
         window.openRegisterModal = openRegisterModal;
         window.openLightbox = openLightbox;
         window.closeLightbox = closeLightbox;
-        window.getNews = getNews;
-        window.getEvents = getEvents;
-        window.getGallery = getGallery;
-        window.getSettings = getSettings;
-        window.getRegistrations = getRegistrations;
-        window.getUrgentNotice = getUrgentNotice;
-        window.fetchData = fetchData;
-        window.saveData = saveData;
     </script>
 </body>
 </html>
