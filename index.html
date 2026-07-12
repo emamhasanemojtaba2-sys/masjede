@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8" />
@@ -392,13 +392,30 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
-        .btn-night { background: #1e293b; }
-        .btn-day { background: #94a3b8; color: #1e293b; }
-        .btn-red { background: #dc2626; }
-        .btn-green { background: #16a34a; }
-        .btn-blue { background: #2563eb; }
-        .btn-gold { background: #c9a84c; color: #1a1a1a; }
-        .btn-reset { background: #94a3b8; color: #1a1a1a; }
+        .btn-night {
+            background: #1e293b;
+        }
+        .btn-day {
+            background: #94a3b8;
+            color: #1e293b;
+        }
+        .btn-red {
+            background: #dc2626;
+        }
+        .btn-green {
+            background: #16a34a;
+        }
+        .btn-blue {
+            background: #2563eb;
+        }
+        .btn-gold {
+            background: #c9a84c;
+            color: #1a1a1a;
+        }
+        .btn-reset {
+            background: #94a3b8;
+            color: #1a1a1a;
+        }
         .sidebar .divider {
             height: 1px;
             background: var(--gold-light);
@@ -529,7 +546,10 @@
             transform: translateY(0);
         }
         @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .section-title {
             font-size: 1.8rem;
@@ -576,8 +596,12 @@
             border-radius: 8px;
         }
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
         }
         .skeleton-text {
             height: 1rem;
@@ -600,7 +624,7 @@
             gap: 1.5rem;
         }
 
-        /* ===== کارت‌های خبر و رویداد ===== */
+        /* ===== کارت‌های خبر ===== */
         .news-card {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -639,75 +663,96 @@
             flex-wrap: wrap;
             margin-top: 0.5rem;
         }
-        .news-card .news-image {
+
+        /* ===== گالری تصاویر خبر (چند تصویر) ===== */
+        .news-images-grid {
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .news-images-grid img {
             width: 100%;
             height: 150px;
             object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 0.8rem;
+            border-radius: 8px;
             cursor: pointer;
+            border: 1px solid var(--card-border-color);
             transition: transform var(--transition);
         }
-        .news-card .news-image:hover {
+        .news-images-grid img:hover {
             transform: scale(1.02);
         }
 
-        .event-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 1.2rem;
-            box-shadow: var(--shadow);
-            border-right: 4px solid var(--gold);
-            transition: all var(--transition);
-            margin-bottom: 1rem;
-        }
-        .event-card:hover {
-            transform: translateX(-4px);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-        }
-        .event-card .date {
-            color: var(--gold);
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-        .event-card h4 {
-            font-size: 1.05rem;
-            margin: 0.2rem 0;
-            color: var(--dark);
-        }
-        .event-card .event-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 0.8rem;
-            cursor: pointer;
-            transition: transform var(--transition);
-        }
-        .event-card .event-image:hover {
-            transform: scale(1.02);
-        }
-        .event-card .register-btn {
+        /* دکمه مشاهده کامل */
+        .btn-read-more {
             display: inline-block;
-            margin-top: 0.8rem;
+            margin-top: 0.6rem;
             background: var(--gold);
             color: var(--dark);
-            padding: 0.3rem 1.2rem;
+            padding: 0.3rem 1.4rem;
             border-radius: 50px;
             font-weight: 600;
             font-size: 0.85rem;
             border: none;
             cursor: pointer;
             transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(201, 168, 76, 0.2);
         }
-        .event-card .register-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(201, 168, 76, 0.3);
+        .btn-read-more:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 18px rgba(201, 168, 76, 0.35);
+            background: #b88a3a;
+            color: #fff;
         }
-        .event-card .register-btn.disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            opacity: 0.6;
+
+        /* ===== فیلتر و جستجو ===== */
+        .news-filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        .news-filter-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            background: var(--bg-body);
+            color: var(--dark);
+            font-family: var(--font);
+            font-size: 0.9rem;
+            transition: all var(--transition);
+        }
+        .news-filter-bar input:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+        }
+        .filter-btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            background: transparent;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font);
+            font-size: 0.85rem;
+        }
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--dark);
+            border-color: var(--gold);
+        }
+        .filter-btn:hover {
+            background: var(--gold-light);
         }
 
         /* ===== گالری ===== */
@@ -772,8 +817,14 @@
             overflow-y: auto;
         }
         @keyframes scaleIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         .modal-box h3 {
             color: var(--gold);
@@ -880,8 +931,14 @@
             transform: scale(1.05);
         }
         @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         /* ===== فوتر ===== */
@@ -937,29 +994,98 @@
 
         /* ===== واکنش‌گرایی ===== */
         @media (max-width: 768px) {
-            body { padding-top: 100px; }
-            .navbar { flex-direction: column; padding: 0.6rem 1rem; }
-            .navbar .nav-links { gap: 0.5rem; justify-content: center; }
-            .navbar .nav-links a { font-size: 0.75rem; padding: 0.2rem 0.4rem; }
-            .hero h1 { font-size: 1.8rem; }
-            .hero { padding: 2rem 1rem 1.8rem; margin: 0 0.5rem 1.5rem; }
-            .section { padding: 0 1rem; }
-            .section-title { font-size: 1.3rem; }
-            .card { padding: 1rem; }
-            .grid-2 { grid-template-columns: 1fr; }
-            .scroll-top { width: 42px; height: 42px; font-size: 1.2rem; bottom: 1.5rem; left: 1.5rem; }
-            .hamburger-btn { top: 0.6rem; left: 0.8rem; width: 40px; height: 40px; font-size: 1.2rem; }
-            .sidebar { width: 280px; padding: 1.5rem 1rem; }
-            .modal-box { padding: 1.5rem; }
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-            .notice-modal-box { padding: 1.5rem; }
-            .notice-modal-title { font-size: 1.3rem; }
+            body {
+                padding-top: 100px;
+            }
+            .navbar {
+                flex-direction: column;
+                padding: 0.6rem 1rem;
+            }
+            .navbar .nav-links {
+                gap: 0.5rem;
+                justify-content: center;
+            }
+            .navbar .nav-links a {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero {
+                padding: 2rem 1rem 1.8rem;
+                margin: 0 0.5rem 1.5rem;
+            }
+            .section {
+                padding: 0 1rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .scroll-top {
+                width: 42px;
+                height: 42px;
+                font-size: 1.2rem;
+                bottom: 1.5rem;
+                left: 1.5rem;
+            }
+            .hamburger-btn {
+                top: 0.6rem;
+                left: 0.8rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            .sidebar {
+                width: 280px;
+                padding: 1.5rem 1rem;
+            }
+            .modal-box {
+                padding: 1.5rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .notice-modal-box {
+                padding: 1.5rem;
+            }
+            .notice-modal-title {
+                font-size: 1.3rem;
+            }
+            .news-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .news-filter-bar input {
+                min-width: auto;
+            }
+            .news-images-grid img {
+                height: 120px;
+            }
         }
         @media (max-width: 480px) {
-            .hero h1 { font-size: 1.4rem; }
-            .hero .quick-info { gap: 0.8rem; font-size: 0.8rem; }
-            .navbar .logo { font-size: 0.95rem; }
-            .section-title { font-size: 1.1rem; }
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+            .hero .quick-info {
+                gap: 0.8rem;
+                font-size: 0.8rem;
+            }
+            .navbar .logo {
+                font-size: 0.95rem;
+            }
+            .section-title {
+                font-size: 1.1rem;
+            }
+            .news-images-grid img {
+                height: 100px;
+            }
         }
     </style>
 </head>
@@ -1002,43 +1128,7 @@
         </div>
     </div>
 
-    <!-- ===== مودال ثبت‌نام رویداد ===== -->
-    <div class="modal-overlay" id="registerModal">
-        <div class="modal-box">
-            <h3 id="registerModalTitle"><i class="fas fa-pen"></i> ثبت‌نام در رویداد</h3>
-            <div id="registerFormContainer">
-                <div class="form-group">
-                    <label>نام و نام خانوادگی</label>
-                    <input type="text" id="regFullName" placeholder="نام و نام خانوادگی..." />
-                </div>
-                <div class="form-group">
-                    <label>کد ملی</label>
-                    <input type="text" id="regNationalCode" placeholder="کد ملی..." maxlength="10" />
-                </div>
-                <div class="form-group">
-                    <label>شماره تلفن</label>
-                    <input type="text" id="regPhone" placeholder="شماره تلفن..." />
-                </div>
-                <div class="form-group">
-                    <label>نام پدر</label>
-                    <input type="text" id="regFatherName" placeholder="نام پدر..." />
-                </div>
-                <div class="form-group">
-                    <label>تاریخ تولد</label>
-                    <input type="text" id="regBirthDate" placeholder="مثلاً ۱۳۸۰/۰۱/۱۵" />
-                </div>
-                <div class="actions">
-                    <button class="btn btn-confirm" id="registerSubmitBtn"><i class="fas fa-check"></i> ثبت‌نام</button>
-                    <button class="btn btn-cancel" id="registerCancelBtn"><i class="fas fa-times"></i> انصراف</button>
-                </div>
-            </div>
-            <div id="registerSuccessMessage" style="display:none; color:var(--gold); font-weight:700; font-size:1.1rem; padding:1rem 0;">
-                <i class="fas fa-check-circle"></i> ثبت‌نام شما با موفقیت انجام شد.
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== مودال نمایش کامل خبر/رویداد ===== -->
+    <!-- ===== مودال نمایش کامل خبر ===== -->
     <div class="modal-overlay" id="fullTextModal">
         <div class="modal-box" style="max-width:700px;">
             <h3 id="fullTextTitle" style="color:var(--gold);"></h3>
@@ -1063,7 +1153,6 @@
         <ul class="nav-links">
             <li><a href="#home"><i class="fas fa-home"></i> خانه</a></li>
             <li><a href="#news"><i class="fas fa-newspaper"></i> اخبار</a></li>
-            <li><a href="#events"><i class="fas fa-calendar-alt"></i> رویدادها</a></li>
             <li><a href="#about"><i class="fas fa-info-circle"></i> معرفی</a></li>
             <li><a href="#contact"><i class="fas fa-phone"></i> تماس</a></li>
             <li><a href="#gallery"><i class="fas fa-images"></i> گالری</a></li>
@@ -1088,6 +1177,18 @@
     <!-- ===== بخش اخبار ===== -->
     <section class="section" id="news">
         <h2 class="section-title"><i class="fas fa-newspaper" style="color:var(--gold);"></i> آخرین اخبار</h2>
+
+        <!-- نوار فیلتر و جستجو -->
+        <div class="news-filter-bar">
+            <input type="text" id="newsSearchInput" placeholder="🔍 جستجو در اخبار..." />
+            <div class="filter-btn-group">
+                <button class="filter-btn active" data-filter="all">همه</button>
+                <button class="filter-btn" data-filter="مذهبی">مذهبی</button>
+                <button class="filter-btn" data-filter="فرهنگی">فرهنگی</button>
+                <button class="filter-btn" data-filter="اطلاعیه">اطلاعیه</button>
+            </div>
+        </div>
+
         <div id="newsContainer" class="grid-2">
             <div class="card skeleton-loading">
                 <div class="skeleton skeleton-image"></div>
@@ -1104,25 +1205,6 @@
         </div>
     </section>
 
-    <!-- ===== بخش رویدادها ===== -->
-    <section class="section" id="events">
-        <h2 class="section-title"><i class="fas fa-calendar-alt" style="color:var(--gold);"></i> رویدادهای پیش‌رو</h2>
-        <div id="eventsContainer">
-            <div class="card skeleton-loading">
-                <div class="skeleton skeleton-image"></div>
-                <div class="skeleton skeleton-text"></div>
-                <div class="skeleton skeleton-text short"></div>
-                <div class="skeleton skeleton-text" style="width:70%;"></div>
-            </div>
-            <div class="card skeleton-loading">
-                <div class="skeleton skeleton-image"></div>
-                <div class="skeleton skeleton-text"></div>
-                <div class="skeleton skeleton-text short"></div>
-                <div class="skeleton skeleton-text" style="width:70%;"></div>
-            </div>
-        </div>
-    </section>
-
     <!-- ===== بخش معرفی مسجد ===== -->
     <section class="section" id="about">
         <h2 class="section-title"><i class="fas fa-info-circle" style="color:var(--gold);"></i> معرفی مسجد</h2>
@@ -1131,7 +1213,7 @@
                 <strong>مسجد امام حسن مجتبی (ع)</strong> در سال ۱۳۹۴ در شهرستان کاشان تأسیس شد. این مسجد با هدف ایجاد فضایی برای عبادت، آموزش و فعالیت‌های فرهنگی و اجتماعی، همواره میزبان نمازگزاران و علاقه‌مندان به معارف اسلامی بوده است.
             </p>
             <p id="imamInfo">
-                <strong>امام جماعت:</strong> حجت‌الاسلام والمسلمین کاظم زاده 
+                <strong>امام جماعت:</strong> حجت‌الاسلام والمسلمین کاظم زاده
             </p>
             <p>
                 <strong>برنامه‌های هفتگی:</strong>
@@ -1179,59 +1261,51 @@
             <i class="fas fa-rose"></i> العجل بقیه الله
         </p>
     </footer>
-
     <script>
         // ============================================================
         // JavaScript - مسجد امام حسن مجتبی (ع) - صفحه اصلی
         // ============================================================
+
+        // ===== Escape HTML =====
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         // ===== داده‌های نمونه =====
         const defaultNews = [{
             id: 1,
             title: 'برگزاری مراسم عزاداری دهه سوم صفر',
             category: 'مذهبی',
-            content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از بیستم تا آخر صفر هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود. سخنران: حجت‌الاسلام والمسلمین کاظم زاده ',
-            date: '۱۴٠۵/٠۴/۲٠',
-            image: 'https://uploadkon.ir/uploads/a05c10_26images.jpeg'
+            content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از شب اربعین تا آخر صفر هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود. سخنران: حجت‌الاسلام والمسلمین کاظم زاده',
+            date: '۱۴۰۵/۰۴/۲۰',
+            images: [
+                'https://uploadkon.ir/uploads/a05c10_26images.jpeg'
+                
+            ]
         }, {
             id: 2,
-            title: '🔹برنامه کلاس های تابستانه مسجد امام حسن مجتبی (ع) کانون فرهنگی هنری بقیع (ویژه پسران) ',
+            title: '🔹برنامه کلاس های تابستانه مسجد امام حسن مجتبی (ع) کانون فرهنگی هنری بقیع (ویژه پسران)',
             category: 'فرهنگی',
-            content:'🟠شنبه: کلاس زبان انگلیسی👩‍🏫مربی: خانم هانیه صفایی-🟠شنبه: کلاس احکام 👨‍🏫مربی: حجت‌الاسلام والمسلمین جواد جعفری-🟡یکشنبه: کلاس نقاشی👩‍🏫مربی: خانم مهدیه صفایی-🟡یکشنبه: فوتبال-🟢دوشنبه:کلاس اوریگامی 🧑‍🏫مربی؛ سید محمد حسین طباطبایی-🟢دوشنبه: کلاس مکالمه عربی👨‍🏫مربی؛ حجت‌الاسلام والمسلمین کاظم زاده-🔵سه شنبه: کلاس نقاشی👩‍🏫مربی؛ خانم مهدیه صفایی-🔵سه شنبه: فوتبال-🟣چهارشنبه: کلاس اوریگامی 🧑‍🏫مربی سیدمحمدحسین طباطبایی-🟣چهارشنبه: کلاس احکام👨‍🏫مربی: حجت الاسلام والمسلمین جواد جعفری ', 
-            data: '۱۴٠۵/٠۴/۲٠', 
-            image: 'https://cdn.imgurl.ir/uploads/w558458_IMG_20260711_182505_147.jpg'
+            content: '🟠شنبه: کلاس زبان انگلیسی 👩‍🏫 مربی: خانم هانیه صفایی\n🟠شنبه: کلاس احکام 👨‍🏫 مربی: حجت‌الاسلام والمسلمین جواد جعفری\n🟡یکشنبه: کلاس نقاشی 👩‍🏫 مربی: خانم مهدیه صفایی\n🟡یکشنبه: فوتبال\n🟢دوشنبه: کلاس اوریگامی 🧑‍🏫 مربی: سید محمد حسین طباطبایی\n🟢دوشنبه: کلاس مکالمه عربی 👨‍🏫 مربی: حجت‌الاسلام والمسلمین کاظم زاده\n🔵سه شنبه: کلاس نقاشی 👩‍🏫 مربی: خانم مهدیه صفایی\n🔵سه شنبه: فوتبال\n🟣چهارشنبه: کلاس اوریگامی 🧑‍🏫 مربی: سید محمد حسین طباطبایی\n🟣چهارشنبه: کلاس احکام 👨‍🏫 مربی: حجت الاسلام والمسلمین جواد جعفری',
+            date: '۱۴۰۵/۰۴/۲۰',
+            images: [
+                'https://cdn.imgurl.ir/uploads/w558458_IMG_20260711_182505_147.jpg'
+            ]
         }, {
             id: 3,
             title: 'تعمیرات و بهسازی شبستان مسجد',
             category: 'اطلاعیه',
             content: 'به اطلاع نمازگزاران عزیز می‌رساند، شبستان مسجد از تاریخ ۱۴۰۴/۰۴/۱۰ تا ۱۴۰۴/۰۴/۲۰ به مدت ۱۰ روز جهت تعمیرات و بهسازی تعطیل خواهد بود. نمازهای جماعت در فضای باز حیاط مسجد برگزار می‌شود.',
             date: '۱۴۰۴/۰۳/۲۰',
-            image: ''
-        }];
-
-        const defaultEvents = [{
-            id: 1,
-            title: 'جشن نیمه شعبان',
-            date: '۱۴۰۴/۰۴/۱۵',
-            time: '۱۹:۰۰',
-            location: 'شبستان مسجد',
-            desc: 'جشن میلاد با سعادت حضرت مهدی (عج) همراه با سخنرانی، مدیحه‌سرایی و پذیرایی',
-            hasRegistration: true,
-            image: ''
-        }, {
-            id: 2,
-            title: 'دوره آموزشی احکام و اخلاق',
-            date: '۱۴۰۴/۰۴/۲۰',
-            time: '۱۶:۰۰',
-            location: 'سالن اجتماعات مسجد',
-            desc: 'دوره آموزشی احکام روزه، نماز و اخلاق اسلامی ویژه برادران و خواهران',
-            hasRegistration: false,
-            image: ''
+            images: []
         }];
 
         const defaultGallery = [
-            { id: 1, title: 'سید مجتبی حسینی خامنه ای ', image: 'https://cdn.imgurl.ir/uploads/b957662_IMG_20260711_225445_471.jpg' },
-            { id: 2, title: 'برنامه تابستانی. ', image: 'https://cdn.imgurl.ir/uploads/w558458_IMG_20260711_182505_147.jpg' }
+            { id: 1, title: 'سید مجتبی حسینی خامنه‌ای', image: 'https://cdn.imgurl.ir/uploads/b957662_IMG_20260711_225445_471.jpg' },
+            { id: 2, title: 'برنامه تابستانی', image: 'https://cdn.imgurl.ir/uploads/w558458_IMG_20260711_182505_147.jpg' }
         ];
 
         // ===== بارگذاری داده‌ها =====
@@ -1248,13 +1322,11 @@
         }
 
         let newsData = loadData('masjedNews', defaultNews);
-        let eventsData = loadData('masjedEvents', defaultEvents);
         let galleryData = loadData('masjedGallery', defaultGallery);
         let settingsData = loadData('masjedSettings', {
-            imam: 'حجت‌الاسلام والمسلمین کاظم زاده ',
+            imam: 'حجت‌الاسلام والمسلمین کاظم زاده',
             phone: '۰۳۱-۵۵۵۵۱۲۳۴'
         });
-        let registrationsData = loadData('masjedRegistrations', []);
         let urgentNoticeData = loadData('masjedUrgentNotice', {
             text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
             active: false
@@ -1311,174 +1383,95 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                if (document.getElementById('lightboxOverlay').classList.contains('open')) {
-                    closeLightbox();
-                }
-                if (document.getElementById('sidebar').classList.contains('open')) {
-                    closeSidebar();
-                }
-                if (document.getElementById('registerModal').classList.contains('open')) {
-                    closeRegisterModal();
-                }
-                if (document.getElementById('noticeModal').classList.contains('show')) {
-                    closeNoticeModal();
-                }
-                if (document.getElementById('fullTextModal').classList.contains('open')) {
-                    closeFullTextModal();
-                }
+                if (document.getElementById('lightboxOverlay').classList.contains('open')) closeLightbox();
+                if (document.getElementById('sidebar').classList.contains('open')) closeSidebar();
+                if (document.getElementById('noticeModal').classList.contains('show')) closeNoticeModal();
+                if (document.getElementById('fullTextModal').classList.contains('open')) closeFullTextModal();
             }
         });
 
         // ===== نمایش اخبار =====
-        function renderNews() {
+        function renderNews(filteredData) {
             const container = document.getElementById('newsContainer');
             if (!container) return;
+            const data = filteredData || newsData;
             container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
 
-            if (newsData.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">هنوز خبری ثبت نشده است.</p>`;
+            if (data.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">هیچ خبری یافت نشد.</p>`;
                 return;
             }
 
-            container.innerHTML = newsData.map(news => `
-                <div class="news-card">
-                    ${news.image ? `<img src="${news.image}" class="news-image" alt="${news.title}" onclick="event.stopPropagation(); openLightbox('${news.image}')" />` : ''}
-                    <span class="category">${news.category}</span>
-                    <h4>${news.title}</h4>
-                    <p style="font-size:0.95rem; color:var(--text-muted);">
-                        ${news.content.substring(0, 120)}${news.content.length > 120 ? '...' : ''}
-                    </p>
-                    ${news.content.length > 120 ? `<button class="register-btn" onclick="event.stopPropagation(); openFullText('${news.title.replace(/'/g, "\\'")}', \`${news.content.replace(/`/g, '&#96;').replace(/'/g, "\\'")}\`)"><i class="fas fa-expand"></i> مشاهده کامل</button>` : ''}
-                    <div class="meta">
-                        <span><i class="far fa-calendar-alt"></i> ${news.date || 'تاریخ نامشخص'}</span>
+            container.innerHTML = data.map(news => {
+                const images = news.images || [];
+                let imagesHtml = '';
+                if (images.length > 0) {
+                    const cols = Math.min(images.length, 4);
+                    imagesHtml = `
+                        <div class="news-images-grid" style="grid-template-columns: repeat(${cols}, 1fr);">
+                            ${images.map(img => `<img src="${img}" alt="${news.title}" onclick="event.stopPropagation(); openLightbox('${img}')" />`).join('')}
+                        </div>
+                    `;
+                }
+
+                const shortContent = escapeHtml(news.content.substring(0, 120)).replace(/\n/g, ' ');
+                const isLong = news.content.length > 120;
+                const titleAttr = escapeHtml(news.title);
+                const contentAttr = escapeHtml(news.content);
+
+                return `
+                    <div class="news-card">
+                        ${imagesHtml}
+                        <span class="category">${news.category}</span>
+                        <h4>${escapeHtml(news.title)}</h4>
+                        <p style="font-size:0.95rem; color:var(--text-muted);">
+                            ${shortContent}${isLong ? '...' : ''}
+                        </p>
+                        ${isLong ? `<button class="btn-read-more" data-title="${titleAttr}" data-content="${contentAttr}"><i class="fas fa-expand"></i> مشاهده کامل</button>` : ''}
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> ${news.date || 'تاریخ نامشخص'}</span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-        }
-
-        // ===== نمایش رویدادها =====
-        function renderEvents() {
-            const container = document.getElementById('eventsContainer');
-            if (!container) return;
-            container.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
-
-            if (eventsData.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">هنوز رویدادی ثبت نشده است.</p>`;
-                return;
-            }
-
-            container.innerHTML = eventsData.map(event => `
-                <div class="event-card" id="event-${event.id}">
-                    ${event.image ? `<img src="${event.image}" class="event-image" alt="${event.title}" onclick="event.stopPropagation(); openLightbox('${event.image}')" />` : ''}
-                    <div class="date"><i class="far fa-calendar-alt"></i> ${event.date || 'تاریخ نامشخص'} ${event.time ? `<i class="far fa-clock"></i> ${event.time}` : ''}</div>
-                    <h4>${event.title}</h4>
-                    ${event.location ? `<p style="font-size:0.9rem; color:var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${event.location}</p>` : ''}
-                    <p style="font-size:0.95rem; color:var(--dark);">${event.desc}</p>
-                    ${event.desc && event.desc.length > 150 ? `<button class="register-btn" onclick="event.stopPropagation(); openFullText('${event.title.replace(/'/g, "\\'")}', \`${event.desc.replace(/`/g, '&#96;').replace(/'/g, "\\'")}\`)"><i class="fas fa-expand"></i> مشاهده کامل</button>` : ''}
-                    ${event.hasRegistration ? 
-                        `<button class="register-btn" onclick="event.stopPropagation(); openRegisterModal(${event.id})"><i class="fas fa-pen"></i> ثبت‌نام در رویداد</button>` : 
-                        ''}
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // ===== نمایش گالری =====
         function renderGallery() {
             const container = document.getElementById('galleryContainer');
             if (!container) return;
-
             if (galleryData.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
                 return;
             }
-
             container.innerHTML = galleryData.map(item => `
                 <div class="gallery-item" onclick="openLightbox('${item.image}')">
-                    <img src="${item.image}" alt="${item.title}" loading="lazy" />
-                    <div class="gallery-title">${item.title || 'بدون عنوان'}</div>
+                    <img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy" />
+                    <div class="gallery-title">${escapeHtml(item.title || 'بدون عنوان')}</div>
                 </div>
             `).join('');
         }
 
-        // ===== مودال ثبت‌نام =====
-        const registerModal = document.getElementById('registerModal');
-        const registerFormContainer = document.getElementById('registerFormContainer');
-        const registerSuccessMessage = document.getElementById('registerSuccessMessage');
-        let currentEventId = null;
+        // ===== فیلتر و جستجو =====
+        let currentFilter = 'all';
+        let currentSearch = '';
 
-        function openRegisterModal(eventId) {
-            currentEventId = eventId;
-            const event = eventsData.find(e => e.id === eventId);
-            if (!event) return;
-
-            document.getElementById('registerModalTitle').textContent = `📝 ثبت‌نام در رویداد: ${event.title}`;
-            registerFormContainer.style.display = 'block';
-            registerSuccessMessage.style.display = 'none';
-
-            document.getElementById('regFullName').value = '';
-            document.getElementById('regNationalCode').value = '';
-            document.getElementById('regPhone').value = '';
-            document.getElementById('regFatherName').value = '';
-            document.getElementById('regBirthDate').value = '';
-
-            registerModal.classList.add('open');
+        function filterNews() {
+            let filtered = newsData;
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(n => n.category === currentFilter);
+            }
+            if (currentSearch.trim() !== '') {
+                const s = currentSearch.trim().toLowerCase();
+                filtered = filtered.filter(n =>
+                    n.title.toLowerCase().includes(s) ||
+                    n.content.toLowerCase().includes(s)
+                );
+            }
+            renderNews(filtered);
         }
 
-        function closeRegisterModal() {
-            registerModal.classList.remove('open');
-            currentEventId = null;
-        }
-
-        document.getElementById('registerCancelBtn')?.addEventListener('click', closeRegisterModal);
-        registerModal?.addEventListener('click', function(e) {
-            if (e.target === this) closeRegisterModal();
-        });
-
-        // ===== ثبت‌نام =====
-        document.getElementById('registerSubmitBtn')?.addEventListener('click', function() {
-            const fullName = document.getElementById('regFullName').value.trim();
-            const nationalCode = document.getElementById('regNationalCode').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const fatherName = document.getElementById('regFatherName').value.trim();
-            const birthDate = document.getElementById('regBirthDate').value.trim();
-
-            if (!fullName || !nationalCode || !phone || !fatherName || !birthDate) {
-                alert('❌ لطفاً همه فیلدها را پر کنید.');
-                return;
-            }
-
-            if (nationalCode.length !== 10 || isNaN(nationalCode)) {
-                alert('❌ کد ملی باید ۱۰ رقم باشد.');
-                return;
-            }
-
-            const event = eventsData.find(e => e.id === currentEventId);
-            if (!event) return;
-
-            const registration = {
-                id: Date.now(),
-                eventId: currentEventId,
-                eventTitle: event.title,
-                fullName,
-                nationalCode,
-                phone,
-                fatherName,
-                birthDate,
-                registeredAt: new Date().toLocaleDateString('fa-IR')
-            };
-
-            registrationsData.push(registration);
-            saveData('masjedRegistrations', registrationsData);
-
-            registerFormContainer.style.display = 'none';
-            registerSuccessMessage.style.display = 'block';
-
-            setTimeout(() => {
-                closeRegisterModal();
-            }, 2000);
-        });
-
-        // ===== مودال نمایش متن کامل =====
+        // ===== مودال نمایش متن کامل (با Event Delegation) =====
         function openFullText(title, content) {
             document.getElementById('fullTextTitle').textContent = title;
             document.getElementById('fullTextContent').innerHTML = content.replace(/\n/g, '<br>');
@@ -1495,11 +1488,21 @@
             if (e.target === this) closeFullTextModal();
         });
 
+        // ===== Event Delegation برای دکمه‌های مشاهده کامل =====
+        document.getElementById('newsContainer')?.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-read-more');
+            if (!btn) return;
+            const title = btn.dataset.title;
+            const content = btn.dataset.content;
+            if (title && content) {
+                openFullText(title, content);
+            }
+        });
+
         // ===== اعلان =====
         function requestNotificationPermission() {
             if (!('Notification' in window)) return;
-            if (Notification.permission === 'granted') return;
-            if (Notification.permission === 'denied') return;
+            if (Notification.permission === 'granted' || Notification.permission === 'denied') return;
             Notification.requestPermission();
         }
 
@@ -1530,8 +1533,7 @@
         });
         scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-
-                        // ===== منوی کناری =====
+        // ===== منوی کناری =====
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1589,7 +1591,8 @@
             document.body.classList.toggle('reading-mode', readingMode);
             localStorage.setItem('readingMode', String(readingMode));
             readingBtn.classList.toggle('active', readingMode);
-            readingBtn.innerHTML = readingMode ? '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی' : '<i class="fas fa-eye"></i> فعال‌سازی';
+            readingBtn.innerHTML = readingMode ? '<i class="fas fa-eye-slash"></i> غیرفعال‌سازی' :
+                '<i class="fas fa-eye"></i> فعال‌سازی';
         }
 
         if (readingMode) {
@@ -1621,15 +1624,27 @@
         document.addEventListener('DOMContentLoaded', function() {
             applySettings();
             renderNews();
-            renderEvents();
             renderGallery();
             requestNotificationPermission();
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    filterNews();
+                });
+            });
+
+            document.getElementById('newsSearchInput')?.addEventListener('input', function() {
+                currentSearch = this.value;
+                filterNews();
+            });
 
             setTimeout(() => {
                 document.querySelectorAll('.skeleton-loading').forEach(el => el.remove());
             }, 1000);
 
-            // نمایش مودال اطلاعیه بعد از 0.5 ثانیه
             setTimeout(() => {
                 loadNoticeModal();
             }, 500);
@@ -1660,11 +1675,10 @@
 
         // ===== توابع سراسری =====
         window.closeNoticeModal = closeNoticeModal;
-        window.openRegisterModal = openRegisterModal;
         window.openLightbox = openLightbox;
         window.closeLightbox = closeLightbox;
-        window.openFullText = openFullText;
         window.closeFullTextModal = closeFullTextModal;
-    </script>
+        window.closeSidebar = closeSidebar;
+</script>
 </body>
 </html>
