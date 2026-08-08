@@ -426,12 +426,14 @@
     <div class="login-overlay" id="loginOverlay">
         <div class="login-box">
             <h3>🔑 ورود به پنل مدیریت</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">رمز عبور را وارد کنید</p>
-            <input type="password" id="adminLoginPassword" placeholder="رمز عبور..." maxlength="20" />
+            <p style="color:var(--text-muted); font-size:0.9rem;">ایمیل و رمز عبور مدیر را وارد کنید</p>
+            <input type="email" id="adminLoginEmail" placeholder="ایمیل مدیر..." autocomplete="username" />
+            <input type="password" id="adminLoginPassword" placeholder="رمز عبور..." autocomplete="current-password" />
             <div class="actions">
-                <button class="btn btn-confirm" id="loginConfirmBtn">✔ تأیید</button>
+                <button class="btn btn-confirm" id="loginConfirmBtn">✔ ورود</button>
                 <button class="btn btn-cancel" id="loginCancelBtn" onclick="window.location.href='index.html'">✖ بازگشت</button>
             </div>
+            <p id="loginMessage" style="margin-top:1rem; color:#dc2626; font-size:0.85rem;"></p>
         </div>
     </div>
 
@@ -452,6 +454,11 @@
             <button class="menu-item" data-panel="events"><i class="fas fa-calendar-alt"></i> رویدادها</button>
             <button class="menu-item" data-panel="registrations"><i class="fas fa-list"></i> ثبت‌نام‌ها</button>
             <button class="menu-item" data-panel="gallery"><i class="fas fa-images"></i> گالری</button>
+            <button class="menu-item" data-panel="quran"><i class="fas fa-book-quran"></i> قرآن روز</button>
+            <button class="menu-item" data-panel="hadith"><i class="fas fa-mosque"></i> حدیث روز</button>
+            <button class="menu-item" data-panel="ahkam"><i class="fas fa-scale-balanced"></i> احکام روز</button>
+            <button class="menu-item" data-panel="videos"><i class="fas fa-video"></i> آرشیو فیلم</button>
+            <button class="menu-item" data-panel="audios"><i class="fas fa-headphones"></i> آرشیو صوت</button>
             <button class="menu-item" data-panel="notice"><i class="fas fa-bullhorn"></i> اطلاعیه فوری</button>
             <div class="menu-divider"></div>
             <button class="menu-item" data-panel="settings"><i class="fas fa-cog"></i> تنظیمات</button>
@@ -631,6 +638,80 @@
                 </div>
             </div>
 
+
+            <!-- ===== قرآن روز ===== -->
+            <div class="section-panel" id="panel-quran">
+                <h2 class="panel-title"><i class="fas fa-book-quran"></i> قرآن روز</h2>
+                <div class="card">
+                    <div class="form-group"><label>سوره</label><input id="quranSurah" type="text" placeholder="مثلاً حمد" /></div>
+                    <div class="form-group"><label>شماره آیه</label><input id="quranVerseNumber" type="text" placeholder="مثلاً ۱" /></div>
+                    <div class="form-group"><label>متن عربی</label><textarea id="quranArabic"></textarea></div>
+                    <div class="form-group"><label>ترجمه</label><textarea id="quranTranslation"></textarea></div>
+                    <button class="btn-submit" id="saveQuranBtn">ذخیره قرآن روز</button>
+                    <input type="hidden" id="quranEditId" />
+                </div>
+                <div class="card"><div class="table-wrap"><table><thead><tr><th>سوره</th><th>آیه</th><th>ترجمه</th><th>عملیات</th></tr></thead><tbody id="quranList"></tbody></table></div></div>
+            </div>
+
+            <!-- ===== حدیث روز ===== -->
+            <div class="section-panel" id="panel-hadith">
+                <h2 class="panel-title"><i class="fas fa-mosque"></i> حدیث روز</h2>
+                <div class="card">
+                    <div class="form-group"><label>عنوان</label><input id="hadithTitle" type="text" /></div>
+                    <div class="form-group"><label>متن عربی</label><textarea id="hadithArabic"></textarea></div>
+                    <div class="form-group"><label>ترجمه</label><textarea id="hadithTranslation"></textarea></div>
+                    <div class="form-group"><label>منبع</label><input id="hadithSource" type="text" /></div>
+                    <button class="btn-submit" id="saveHadithBtn">ذخیره حدیث روز</button>
+                    <input type="hidden" id="hadithEditId" />
+                </div>
+                <div class="card"><div class="table-wrap"><table><thead><tr><th>عنوان</th><th>منبع</th><th>عملیات</th></tr></thead><tbody id="hadithList"></tbody></table></div></div>
+            </div>
+
+            <!-- ===== احکام روز ===== -->
+            <div class="section-panel" id="panel-ahkam">
+                <h2 class="panel-title"><i class="fas fa-scale-balanced"></i> احکام روز</h2>
+                <div class="card">
+                    <div class="form-group"><label>سؤال</label><textarea id="ahkamQuestion"></textarea></div>
+                    <div class="form-group"><label>پاسخ</label><textarea id="ahkamAnswer"></textarea></div>
+                    <div class="form-group"><label>منبع</label><input id="ahkamSource" type="text" /></div>
+                    <button class="btn-submit" id="saveAhkamBtn">ذخیره حکم</button>
+                    <input type="hidden" id="ahkamEditId" />
+                </div>
+                <div class="card"><div class="table-wrap"><table><thead><tr><th>سؤال</th><th>منبع</th><th>عملیات</th></tr></thead><tbody id="ahkamList"></tbody></table></div></div>
+            </div>
+
+            <!-- ===== آرشیو فیلم ===== -->
+            <div class="section-panel" id="panel-videos">
+                <h2 class="panel-title"><i class="fas fa-video"></i> آرشیو فیلم</h2>
+                <div class="card">
+                    <div class="form-group"><label>عنوان</label><input id="videoTitle" type="text" /></div>
+                    <div class="form-group"><label>توضیحات</label><textarea id="videoDescription"></textarea></div>
+                    <div class="form-group"><label>دسته‌بندی</label><input id="videoCategory" type="text" placeholder="مراسم، سخنرانی و..." /></div>
+                    <div class="form-group"><label>فایل فیلم</label><input id="videoFile" type="file" accept="video/*" /></div>
+                    <div class="form-group"><label>لینک فیلم (اختیاری، اگر فایل آپلود نمی‌کنی)</label><input id="videoUrl" type="url" /></div>
+                    <div class="form-group"><label>تصویر بندانگشتی (اختیاری)</label><input id="videoThumbnail" type="url" /></div>
+                    <button class="btn-submit" id="saveVideoBtn">افزودن فیلم</button>
+                    <input type="hidden" id="videoEditId" />
+                </div>
+                <div class="card"><div class="table-wrap"><table><thead><tr><th>عنوان</th><th>دسته‌بندی</th><th>عملیات</th></tr></thead><tbody id="videoList"></tbody></table></div></div>
+            </div>
+
+            <!-- ===== آرشیو صوت ===== -->
+            <div class="section-panel" id="panel-audios">
+                <h2 class="panel-title"><i class="fas fa-headphones"></i> آرشیو صوت</h2>
+                <div class="card">
+                    <div class="form-group"><label>عنوان</label><input id="audioTitle" type="text" /></div>
+                    <div class="form-group"><label>توضیحات</label><textarea id="audioDescription"></textarea></div>
+                    <div class="form-group"><label>دسته‌بندی</label><input id="audioCategory" type="text" /></div>
+                    <div class="form-group"><label>فایل صوت</label><input id="audioFile" type="file" accept="audio/*" /></div>
+                    <div class="form-group"><label>لینک صوت (اختیاری، اگر فایل آپلود نمی‌کنی)</label><input id="audioUrl" type="url" /></div>
+                    <div class="form-group"><label>تصویر (اختیاری)</label><input id="audioImage" type="url" /></div>
+                    <button class="btn-submit" id="saveAudioBtn">افزودن صوت</button>
+                    <input type="hidden" id="audioEditId" />
+                </div>
+                <div class="card"><div class="table-wrap"><table><thead><tr><th>عنوان</th><th>دسته‌بندی</th><th>عملیات</th></tr></thead><tbody id="audioList"></tbody></table></div></div>
+            </div>
+
             <!-- ===== اطلاعیه فوری ===== -->
             <div class="section-panel" id="panel-notice">
                 <h2 class="panel-title"><i class="fas fa-bullhorn"></i> اطلاعیه فوری</h2>
@@ -669,577 +750,355 @@
     </div>
 
     <!-- ===== جاوااسکریپت ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ============================================================
-        // JavaScript - پنل مدیریت مسجد امام حسن مجتبی (ع)
-        // ============================================================
+/* ============================================================
+   پنل مدیریت مسجد امام حسن مجتبی (ع)
+   نسخه مرکزی Supabase
+   ============================================================ */
 
-        // ===== رمز ورود =====
-        const ADMIN_PASSWORD = '1251351123';
+const SUPABASE_URL = 'https://hxikfmpbyriopjtcoujm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_CSAZezqZW59C_Q0jldP6Ag_2WppQTAV';
+const ADMIN_UID = '9ca5cead-74d2-4eaa-a4cd-4df139ad30e6';
 
-        // ===== داده‌های نمونه (همانند صفحه اصلی) =====
-        const defaultNews = [{
-            id: 1,
-            title: 'برگزاری مراسم عزاداری دهه اول محرم',
-            category: 'مذهبی',
-            content: 'مراسم عزاداری سرور و سالار شهیدان، حضرت اباعبدالله الحسین (ع) از اول تا دهم محرم هر شب بعد از نماز مغرب و عشاء در مسجد برگزار می‌شود. سخنران: حجت‌الاسلام والمسلمین رضایی',
-            date: '۱۴۰۴/۰۴/۰۱',
-            image: ''
-        }, {
-            id: 2,
-            title: 'کلاس های تفسیر قرآن کریم آغاز شد',
-            category: 'فرهنگی',
-            content: 'کلاس‌های تفسیر قرآن کریم هر پنجشنبه ساعت ۱۷ با حضور حجت‌الاسلام والمسلمین رضایی برگزار می‌شود. شرکت برای عموم آزاد است.',
-            date: '۱۴۰۴/۰۳/۲۵',
-            image: ''
-        }, {
-            id: 3,
-            title: 'تعمیرات و بهسازی شبستان مسجد',
-            category: 'اطلاعیه',
-            content: 'به اطلاع نمازگزاران عزیز می‌رساند، شبستان مسجد از تاریخ ۱۴۰۴/۰۴/۱۰ تا ۱۴۰۴/۰۴/۲۰ به مدت ۱۰ روز جهت تعمیرات و بهسازی تعطیل خواهد بود. نمازهای جماعت در فضای باز حیاط مسجد برگزار می‌شود.',
-            date: '۱۴۰۴/۰۳/۲۰',
-            image: ''
-        }];
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const loginOverlay = document.getElementById('loginOverlay');
+const adminContainer = document.getElementById('adminContainer');
+const loginEmail = document.getElementById('adminLoginEmail');
+const loginPassword = document.getElementById('adminLoginPassword');
+const loginButton = document.getElementById('loginConfirmBtn');
+const loginMessage = document.getElementById('loginMessage');
 
-        const defaultEvents = [{
-            id: 1,
-            title: 'جشن نیمه شعبان',
-            date: '۱۴۰۴/۰۴/۱۵',
-            time: '۱۹:۰۰',
-            location: 'شبستان مسجد',
-            desc: 'جشن میلاد با سعادت حضرت مهدی (عج) همراه با سخنرانی، مدیحه‌سرایی و پذیرایی',
-            hasRegistration: true,
-            image: ''
-        }, {
-            id: 2,
-            title: 'دوره آموزشی احکام و اخلاق',
-            date: '۱۴۰۴/۰۴/۲۰',
-            time: '۱۶:۰۰',
-            location: 'سالن اجتماعات مسجد',
-            desc: 'دوره آموزشی احکام روزه، نماز و اخلاق اسلامی ویژه برادران و خواهران',
-            hasRegistration: false,
-            image: ''
-        }];
+function esc(v) {
+    return String(v ?? '')
+        .replaceAll('&','&amp;').replaceAll('<','&lt;')
+        .replaceAll('>','&gt;').replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+}
+function msg(text, ok=false) {
+    if (!loginMessage) return;
+    loginMessage.textContent = text || '';
+    loginMessage.style.color = ok ? '#16a34a' : '#dc2626';
+}
+function showAdmin() {
+    loginOverlay.classList.add('hidden');
+    adminContainer.style.display = 'flex';
+    loadAllData();
+}
+function hideAdmin() {
+    adminContainer.style.display = 'none';
+    loginOverlay.classList.remove('hidden');
+}
+async function checkAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return hideAdmin();
+    if (session.user.id !== ADMIN_UID) {
+        await sb.auth.signOut();
+        hideAdmin();
+        msg('❌ این حساب مدیر سایت نیست.');
+        return;
+    }
+    showAdmin();
+}
+async function login() {
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
+    if (!email || !password) return msg('لطفاً ایمیل و رمز عبور را وارد کنید.');
+    loginButton.disabled = true;
+    loginButton.textContent = '⏳ در حال ورود...';
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    loginButton.disabled = false;
+    loginButton.textContent = '✔ ورود';
+    if (error) {
+        console.error(error);
+        return msg('❌ ایمیل یا رمز عبور صحیح نیست.');
+    }
+    if (!data.user || data.user.id !== ADMIN_UID) {
+        await sb.auth.signOut();
+        return msg('❌ این حساب مدیر سایت نیست.');
+    }
+    loginEmail.value = '';
+    loginPassword.value = '';
+    msg('');
+    showAdmin();
+}
+async function logout() {
+    if (!confirm('آیا از خروج از پنل مدیریت مطمئن هستید؟')) return;
+    await sb.auth.signOut();
+    hideAdmin();
+}
+loginButton?.addEventListener('click', login);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !loginOverlay.classList.contains('hidden')) login();
+});
 
-        const defaultGallery = [
-            { id: 1, title: 'مراسم محرم', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=مراسم+محرم' },
-            { id: 2, title: 'کلاس تفسیر', image: 'https://via.placeholder.com/300x200/1a5c3a/fff?text=کلاس+تفسیر' }
-        ];
+/* ---------- navigation ---------- */
+document.querySelectorAll('.menu-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.menu-item[data-panel]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${btn.dataset.panel}`)?.classList.add('active');
+    });
+});
 
-        // ===== بارگذاری داده‌ها =====
-        function loadData(key, defaultData) {
-            const stored = localStorage.getItem(key);
-            if (stored) {
-                try { return JSON.parse(stored); } catch (e) { return defaultData; }
-            }
-            return defaultData;
-        }
+/* ---------- helpers ---------- */
+async function countRows(table, id) {
+    const { count, error } = await sb.from(table).select('*', { count:'exact', head:true });
+    if (!error && document.getElementById(id)) document.getElementById(id).textContent = count ?? 0;
+}
+async function updateStats() {
+    await Promise.all([
+        countRows('news','statNews'),
+        countRows('events','statEvents'),
+        countRows('registrations','statRegistrations'),
+        countRows('gallery','statGallery')
+    ]);
+    const el = document.getElementById('lastUpdate');
+    if (el) el.textContent = new Date().toLocaleString('fa-IR');
+}
+async function loadAllData() {
+    await Promise.all([
+        renderNewsList(), renderEventsList(), renderRegistrationsList(),
+        renderGalleryList(), loadNotice(), loadSettings(),
+        renderQuran(), renderHadith(), renderAhkam(),
+        renderVideos(), renderAudios(), updateStats()
+    ]);
+}
+async function uploadToBucket(bucket, file) {
+    if (!file) return null;
+    const safeName = file.name.replace(/[^\w.\-]+/g, '_');
+    const path = `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+    const { error } = await sb.storage.from(bucket).upload(path, file, {
+        cacheControl: '3600',
+        upsert: false
+    });
+    if (error) throw error;
+    return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+function pathFromPublicUrl(url, bucket) {
+    if (!url) return null;
+    const marker = `/storage/v1/object/public/${bucket}/`;
+    const i = url.indexOf(marker);
+    return i >= 0 ? decodeURIComponent(url.slice(i + marker.length)) : null;
+}
+async function deleteStorageUrl(bucket, url) {
+    const path = pathFromPublicUrl(url, bucket);
+    if (!path) return;
+    const { error } = await sb.storage.from(bucket).remove([path]);
+    if (error) console.warn('Storage delete:', error);
+}
+function clear(ids) {
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
 
-        function saveData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
+/* ---------- news ---------- */
+async function renderNewsList() {
+    const tbody = document.getElementById('adminNewsList');
+    if (!tbody) return;
+    const { data, error } = await sb.from('news').select('*').order('created_at',{ascending:false});
+    if (error) return tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">❌ خطا در دریافت اخبار</td></tr>`;
+    if (!data?.length) return tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">خبری موجود نیست.</td></tr>`;
+    tbody.innerHTML = data.map(n => `<tr>
+        <td>${esc(n.title)}</td><td>${esc(n.category)}</td><td>${esc(n.date || 'نامشخص')}</td>
+        <td>
+          <button class="btn-secondary" onclick="editNews(${n.id})">✏️</button>
+          <button class="btn-danger" onclick="deleteNews(${n.id})">🗑️</button>
+        </td></tr>`).join('');
+}
+async function editNews(id) {
+    const {data,error}=await sb.from('news').select('*').eq('id',id).single();
+    if(error) return alert('❌ دریافت خبر ناموفق بود.');
+    adminNewsTitle.value=data.title||''; adminNewsCategory.value=data.category||'مذهبی';
+    adminNewsContent.value=data.content||''; adminNewsDate.value=data.date||''; adminNewsImage.value=data.image||'';
+    adminEditNewsId.value=id; adminSaveNewsBtn.innerHTML='✏️ ویرایش خبر';
+    document.getElementById('panel-news').scrollIntoView({behavior:'smooth'});
+}
+function cancelNewsEdit() {
+    clear(['adminNewsTitle','adminNewsContent','adminNewsDate','adminNewsImage','adminEditNewsId']);
+    adminNewsCategory.value='مذهبی'; adminSaveNewsBtn.innerHTML='💾 ذخیره خبر';
+}
+async function deleteNews(id) {
+    if(!confirm('آیا از حذف این خبر مطمئن هستید؟')) return;
+    const {error}=await sb.from('news').delete().eq('id',id);
+    if(error) return alert('❌ حذف خبر ناموفق بود.');
+    await renderNewsList(); await updateStats(); alert('✅ خبر حذف شد.');
+}
+adminSaveNewsBtn?.addEventListener('click',async()=>{
+    const title=adminNewsTitle.value.trim(), category=adminNewsCategory.value;
+    const content=adminNewsContent.value.trim(), date=adminNewsDate.value.trim(), image=adminNewsImage.value.trim();
+    if(!title||!content) return alert('لطفاً عنوان و متن خبر را وارد کنید.');
+    const id=adminEditNewsId.value;
+    const payload={title,category,content,date:date||'تاریخ نامشخص',image:image||null,updated_at:new Date().toISOString()};
+    const result=id ? await sb.from('news').update(payload).eq('id',Number(id)) : await sb.from('news').insert(payload);
+    if(result.error){console.error(result.error);return alert('❌ ذخیره خبر ناموفق بود.');}
+    cancelNewsEdit(); await renderNewsList(); await updateStats(); alert(id?'✅ خبر ویرایش شد.':'✅ خبر اضافه شد.');
+});
 
-        let newsData = loadData('masjedNews', defaultNews);
-        let eventsData = loadData('masjedEvents', defaultEvents);
-        let galleryData = loadData('masjedGallery', defaultGallery);
-        let settingsData = loadData('masjedSettings', {
-            imam: 'حجت‌الاسلام والمسلمین رضایی',
-            phone: '۰۳۱-۵۵۵۵۱۲۳۴'
-        });
-        let registrationsData = loadData('masjedRegistrations', []);
-        let urgentNoticeData = loadData('masjedUrgentNotice', {
-            text: '📢 اطلاعیه مهم: برنامه‌های این هفته مسجد اعلام شد.',
-            active: true
-        });
+/* ---------- events ---------- */
+async function renderEventsList(){
+    const tbody=adminEventsList; if(!tbody)return;
+    const {data,error}=await sb.from('events').select('*').order('created_at',{ascending:false});
+    if(error)return tbody.innerHTML=`<tr><td colspan="4" class="empty-msg">❌ خطا در دریافت رویدادها</td></tr>`;
+    if(!data?.length)return tbody.innerHTML=`<tr><td colspan="4" class="empty-msg">رویدادی موجود نیست.</td></tr>`;
+    tbody.innerHTML=data.map(e=>`<tr><td>${esc(e.title)}</td><td>${esc(e.date||'نامشخص')}</td><td>${e.has_registration?'✅ فعال':'❌ غیرفعال'}</td><td><button class="btn-secondary" onclick="editEvent(${e.id})">✏️</button> <button class="btn-danger" onclick="deleteEvent(${e.id})">🗑️</button></td></tr>`).join('');
+}
+async function editEvent(id){
+    const {data,error}=await sb.from('events').select('*').eq('id',id).single();
+    if(error)return alert('❌ دریافت رویداد ناموفق بود.');
+    adminEventTitle.value=data.title||''; adminEventDate.value=data.date||''; adminEventTime.value=data.time||'';
+    adminEventLocation.value=data.location||''; adminEventDesc.value=data.description||''; adminEventImage.value=data.image||'';
+    adminEventHasRegistration.checked=!!data.has_registration; adminEditEventId.value=id; adminSaveEventBtn.innerHTML='✏️ ویرایش رویداد';
+}
+function cancelEventEdit(){clear(['adminEventTitle','adminEventDate','adminEventTime','adminEventLocation','adminEventDesc','adminEventImage','adminEditEventId']);adminEventHasRegistration.checked=false;adminSaveEventBtn.innerHTML='💾 ذخیره رویداد';}
+async function deleteEvent(id){if(!confirm('آیا از حذف این رویداد مطمئن هستید؟'))return;const{error}=await sb.from('events').delete().eq('id',id);if(error)return alert('❌ حذف رویداد ناموفق بود.');await renderEventsList();await updateStats();alert('✅ رویداد حذف شد.');}
+adminSaveEventBtn?.addEventListener('click',async()=>{
+    const title=adminEventTitle.value.trim(),date=adminEventDate.value.trim(),time=adminEventTime.value.trim(),location=adminEventLocation.value.trim(),description=adminEventDesc.value.trim(),image=adminEventImage.value.trim(),has_registration=adminEventHasRegistration.checked,id=adminEditEventId.value;
+    if(!title||!description)return alert('لطفاً عنوان و توضیحات را وارد کنید.');
+    const payload={title,date:date||'تاریخ نامشخص',time,location,description,image:image||null,has_registration,updated_at:new Date().toISOString()};
+    const result=id?await sb.from('events').update(payload).eq('id',Number(id)):await sb.from('events').insert(payload);
+    if(result.error){console.error(result.error);return alert('❌ ذخیره رویداد ناموفق بود.');}
+    cancelEventEdit();await renderEventsList();await updateStats();alert(id?'✅ رویداد ویرایش شد.':'✅ رویداد اضافه شد.');
+});
 
-        let editingNewsId = null;
-        let editingEventId = null;
+/* ---------- registrations ---------- */
+async function loadRegistrations(){
+    const {data,error}=await sb.from('registrations').select('*').order('registered_at',{ascending:false});
+    if(error){console.error(error);return [];} return data||[];
+}
+async function renderRegistrationsList(){
+    const tbody=adminRegistrationsList;if(!tbody)return;
+    const data=await loadRegistrations();
+    if(!data.length)return tbody.innerHTML=`<tr><td colspan="7" class="empty-msg">هیچ ثبت‌نامی انجام نشده است.</td></tr>`;
+    tbody.innerHTML=data.map(r=>`<tr><td>${esc(r.event_title||'نامشخص')}</td><td>${esc(r.full_name)}</td><td>${esc(r.national_code)}</td><td>${esc(r.phone)}</td><td>${esc(r.father_name)}</td><td>${esc(r.birth_date)}</td><td>${esc(r.registered_at||'')}</td></tr>`).join('');
+}
+refreshRegistrationsBtn?.addEventListener('click',async()=>{await renderRegistrationsList();await updateStats();alert('✅ بازخوانی شد.');});
+exportExcelBtn?.addEventListener('click',async()=>{
+    const rows=await loadRegistrations(); if(!rows.length)return alert('⚠️ داده‌ای وجود ندارد.');
+    const headers=['رویداد','نام و نام‌خانوادگی','کد ملی','تلفن','نام پدر','تاریخ تولد','تاریخ ثبت'];
+    const csv=[headers,...rows.map(r=>[r.event_title,r.full_name,r.national_code,r.phone,r.father_name,r.birth_date,r.registered_at])]
+      .map(row=>row.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download='ثبت_نام_مسجد.csv';a.click();
+});
+exportPdfBtn?.addEventListener('click',async()=>{
+    const rows=await loadRegistrations(); if(!rows.length)return alert('⚠️ داده‌ای وجود ندارد.');
+    const w=window.open('','_blank'); w.document.write(`<html dir="rtl"><meta charset="utf-8"><style>body{font-family:Tahoma;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:7px;text-align:center}th{background:#c9a84c}</style><h2>لیست ثبت‌نام‌های مسجد امام حسن مجتبی (ع)</h2><table><tr><th>رویداد</th><th>نام</th><th>کد ملی</th><th>تلفن</th><th>نام پدر</th><th>تولد</th><th>ثبت</th></tr>${rows.map(r=>`<tr><td>${esc(r.event_title)}</td><td>${esc(r.full_name)}</td><td>${esc(r.national_code)}</td><td>${esc(r.phone)}</td><td>${esc(r.father_name)}</td><td>${esc(r.birth_date)}</td><td>${esc(r.registered_at)}</td></tr>`).join('')}</table></html>`);w.document.close();setTimeout(()=>w.print(),500);
+});
 
-        // ===== ورود به پنل =====
-        const loginOverlay = document.getElementById('loginOverlay');
-        const loginPassword = document.getElementById('adminLoginPassword');
-        const loginConfirmBtn = document.getElementById('loginConfirmBtn');
-        const loginCancelBtn = document.getElementById('loginCancelBtn');
+/* ---------- gallery ---------- */
+async function renderGalleryList(){
+    const box=adminGalleryList;if(!box)return;
+    const {data,error}=await sb.from('gallery').select('*').order('created_at',{ascending:false});
+    if(error)return box.innerHTML='<p>❌ خطا در دریافت گالری</p>';
+    if(!data?.length)return box.innerHTML='<p style="color:var(--text-muted);">تصویری موجود نیست.</p>';
+    box.innerHTML=data.map(g=>`<div style="background:var(--bg-card);border-radius:12px;padding:.5rem;text-align:center;border:1px solid var(--card-border-color)"><img src="${esc(g.image)}" alt="${esc(g.title)}" style="width:100%;height:120px;object-fit:cover;border-radius:8px"><p>${esc(g.title||'بدون عنوان')}</p><button class="btn-danger" onclick="deleteGalleryItem(${g.id})">🗑️</button></div>`).join('');
+}
+async function deleteGalleryItem(id){
+    if(!confirm('آیا از حذف این تصویر مطمئن هستید؟'))return;
+    const {data}=await sb.from('gallery').select('image').eq('id',id).single();
+    const {error}=await sb.from('gallery').delete().eq('id',id);
+    if(error)return alert('❌ حذف تصویر ناموفق بود.');
+    if(data?.image)await deleteStorageUrl('gallery',data.image);
+    await renderGalleryList();await updateStats();alert('✅ تصویر حذف شد.');
+}
+adminSaveGalleryBtn?.addEventListener('click',async()=>{
+    const title=adminGalleryTitle.value.trim(),file=adminGalleryImageUpload.files[0],manual=adminGalleryImage.value.trim();
+    if(!file&&!manual)return alert('یک فایل تصویر یا لینک تصویر وارد کنید.');
+    let image=manual;
+    try{if(file)image=await uploadToBucket('gallery',file);}catch(e){console.error(e);return alert('❌ آپلود تصویر ناموفق بود.');}
+    const {error}=await sb.from('gallery').insert({title:title||'تصویر',image});
+    if(error)return alert('❌ ذخیره تصویر ناموفق بود.');
+    clear(['adminGalleryTitle','adminGalleryImage']);adminGalleryImageUpload.value='';await renderGalleryList();await updateStats();alert('✅ تصویر اضافه شد.');
+});
 
-        // بررسی وضعیت ورود از sessionStorage
-        function checkLoginStatus() {
-            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                loadAllData();
-                updateStats();
-                return true;
-            }
-            return false;
-        }
+/* ---------- notice/settings ---------- */
+async function loadNotice(){const{data}=await sb.from('urgent_notice').select('*').eq('id',1).maybeSingle();if(data){adminNoticeText.value=data.text||'';adminNoticeActive.checked=data.active!==false;}}
+adminSaveNoticeBtn?.addEventListener('click',async()=>{const text=adminNoticeText.value.trim(),active=adminNoticeActive.checked;if(!text)return alert('متن اطلاعیه را وارد کنید.');const{error}=await sb.from('urgent_notice').upsert({id:1,text,active,updated_at:new Date().toISOString()});if(error)return alert('❌ ذخیره اطلاعیه ناموفق بود.');alert('✅ اطلاعیه ذخیره شد.');});
+async function loadSettings(){const{data}=await sb.from('site_settings').select('*').eq('id',1).maybeSingle();if(data){adminSettingsImam.value=data.imam||'';adminSettingsPhone.value=data.phone||'';}}
+adminSaveSettingsBtn?.addEventListener('click',async()=>{const imam=adminSettingsImam.value.trim(),phone=adminSettingsPhone.value.trim();if(!imam||!phone)return alert('هر دو فیلد را پر کنید.');const{error}=await sb.from('site_settings').upsert({id:1,imam,phone,updated_at:new Date().toISOString()});if(error)return alert('❌ ذخیره تنظیمات ناموفق بود.');alert('✅ تنظیمات ذخیره شد.');});
 
-        loginConfirmBtn?.addEventListener('click', function() {
-            const password = loginPassword.value.trim();
-            if (password === ADMIN_PASSWORD) {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                loadAllData();
-                updateStats();
-                loginPassword.value = '';
-            } else {
-                alert('❌ رمز عبور اشتباه است!');
-                loginPassword.value = '';
-                loginPassword.focus();
-            }
-        });
+/* ---------- daily Quran ---------- */
+async function renderQuran(){
+    const box=quranList;if(!box)return;const{data,error}=await sb.from('daily_quran').select('*').order('created_at',{ascending:false});
+    if(error)return box.innerHTML='<tr><td colspan="4">❌ خطا</td></tr>';
+    box.innerHTML=data?.length?data.map(x=>`<tr><td>${esc(x.surah)}</td><td>${esc(x.verse_number)}</td><td>${esc(x.translation)}</td><td><button class="btn-secondary" onclick="editQuran(${x.id})">✏️</button><button class="btn-danger" onclick="deleteQuran(${x.id})">🗑️</button></td></tr>`).join(''):'<tr><td colspan="4">موردی موجود نیست.</td></tr>';
+}
+async function editQuran(id){const{data}=await sb.from('daily_quran').select('*').eq('id',id).single();if(!data)return;quranSurah.value=data.surah||'';quranVerseNumber.value=data.verse_number||'';quranArabic.value=data.arabic_text||'';quranTranslation.value=data.translation||'';quranEditId.value=id;}
+async function deleteQuran(id){if(!confirm('حذف شود؟'))return;const{error}=await sb.from('daily_quran').delete().eq('id',id);if(error)return alert('❌ حذف ناموفق بود.');await renderQuran();}
+saveQuranBtn?.addEventListener('click',async()=>{const p={surah:quranSurah.value.trim(),verse_number:quranVerseNumber.value.trim(),arabic_text:quranArabic.value.trim(),translation:quranTranslation.value.trim()};if(!p.surah||!p.arabic_text)return alert('سوره و متن عربی را وارد کنید.');const id=quranEditId.value;const r=id?await sb.from('daily_quran').update({...p,updated_at:new Date().toISOString()}).eq('id',id):await sb.from('daily_quran').insert(p);if(r.error)return alert('❌ ذخیره قرآن ناموفق بود.');clear(['quranSurah','quranVerseNumber','quranArabic','quranTranslation','quranEditId']);await renderQuran();alert('✅ ذخیره شد.');});
 
-        // ورود با کلید Enter
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !loginOverlay.classList.contains('hidden')) {
-                loginConfirmBtn?.click();
-            }
-        });
+/* ---------- daily Hadith ---------- */
+async function renderHadith(){const box=hadithList;if(!box)return;const{data,error}=await sb.from('daily_hadith').select('*').order('created_at',{ascending:false});if(error)return box.innerHTML='<tr><td colspan="3">❌ خطا</td></tr>';box.innerHTML=data?.length?data.map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.source)}</td><td><button class="btn-secondary" onclick="editHadith(${x.id})">✏️</button><button class="btn-danger" onclick="deleteHadith(${x.id})">🗑️</button></td></tr>`).join(''):'<tr><td colspan="3">موردی موجود نیست.</td></tr>';}
+async function editHadith(id){const{data}=await sb.from('daily_hadith').select('*').eq('id',id).single();if(!data)return;hadithTitle.value=data.title||'';hadithArabic.value=data.arabic_text||'';hadithTranslation.value=data.translation||'';hadithSource.value=data.source||'';hadithEditId.value=id;}
+async function deleteHadith(id){if(!confirm('حذف شود؟'))return;const{error}=await sb.from('daily_hadith').delete().eq('id',id);if(error)return alert('❌ حذف ناموفق بود.');await renderHadith();}
+saveHadithBtn?.addEventListener('click',async()=>{const p={title:hadithTitle.value.trim(),arabic_text:hadithArabic.value.trim(),translation:hadithTranslation.value.trim(),source:hadithSource.value.trim()};if(!p.arabic_text)return alert('متن عربی را وارد کنید.');const id=hadithEditId.value;const r=id?await sb.from('daily_hadith').update({...p,updated_at:new Date().toISOString()}).eq('id',id):await sb.from('daily_hadith').insert(p);if(r.error)return alert('❌ ذخیره حدیث ناموفق بود.');clear(['hadithTitle','hadithArabic','hadithTranslation','hadithSource','hadithEditId']);await renderHadith();alert('✅ ذخیره شد.');});
 
-        // ===== خروج =====
-        function logout() {
-            if (confirm('آیا از خروج از پنل مدیریت مطمئن هستید؟')) {
-                document.getElementById('adminContainer').style.display = 'none';
-                loginOverlay.classList.remove('hidden');
-                loginPassword.value = '';
-                sessionStorage.removeItem('adminLoggedIn');
-                localStorage.removeItem('adminLoggedIn');
-            }
-        }
+/* ---------- daily Ahkam ---------- */
+async function renderAhkam(){const box=ahkamList;if(!box)return;const{data,error}=await sb.from('daily_ahkam').select('*').order('created_at',{ascending:false});if(error)return box.innerHTML='<tr><td colspan="3">❌ خطا</td></tr>';box.innerHTML=data?.length?data.map(x=>`<tr><td>${esc(x.question)}</td><td>${esc(x.source)}</td><td><button class="btn-secondary" onclick="editAhkam(${x.id})">✏️</button><button class="btn-danger" onclick="deleteAhkam(${x.id})">🗑️</button></td></tr>`).join(''):'<tr><td colspan="3">موردی موجود نیست.</td></tr>';}
+async function editAhkam(id){const{data}=await sb.from('daily_ahkam').select('*').eq('id',id).single();if(!data)return;ahkamQuestion.value=data.question||'';ahkamAnswer.value=data.answer||'';ahkamSource.value=data.source||'';ahkamEditId.value=id;}
+async function deleteAhkam(id){if(!confirm('حذف شود؟'))return;const{error}=await sb.from('daily_ahkam').delete().eq('id',id);if(error)return alert('❌ حذف ناموفق بود.');await renderAhkam();}
+saveAhkamBtn?.addEventListener('click',async()=>{const p={question:ahkamQuestion.value.trim(),answer:ahkamAnswer.value.trim(),source:ahkamSource.value.trim()};if(!p.question||!p.answer)return alert('سؤال و پاسخ را وارد کنید.');const id=ahkamEditId.value;const r=id?await sb.from('daily_ahkam').update({...p,updated_at:new Date().toISOString()}).eq('id',id):await sb.from('daily_ahkam').insert(p);if(r.error)return alert('❌ ذخیره حکم ناموفق بود.');clear(['ahkamQuestion','ahkamAnswer','ahkamSource','ahkamEditId']);await renderAhkam();alert('✅ ذخیره شد.');});
 
-        // ===== ناوبری =====
-        document.querySelectorAll('.menu-item[data-panel]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.menu-item[data-panel]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const panel = this.dataset.panel;
-                document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById(`panel-${panel}`).classList.add('active');
-            });
-        });
+/* ---------- videos ---------- */
+async function renderVideos(){const box=videoList;if(!box)return;const{data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false});if(error)return box.innerHTML='<tr><td colspan="3">❌ خطا</td></tr>';box.innerHTML=data?.length?data.map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.category)}</td><td><button class="btn-secondary" onclick="editVideo(${x.id})">✏️</button><button class="btn-danger" onclick="deleteVideo(${x.id})">🗑️</button></td></tr>`).join(''):'<tr><td colspan="3">فیلمی موجود نیست.</td></tr>';}
+async function editVideo(id){const{data}=await sb.from('videos').select('*').eq('id',id).single();if(!data)return;videoTitle.value=data.title||'';videoDescription.value=data.description||'';videoCategory.value=data.category||'';videoUrl.value=data.video_url||'';videoThumbnail.value=data.thumbnail||'';videoEditId.value=id;}
+async function deleteVideo(id){if(!confirm('حذف فیلم و فایل آن انجام شود؟'))return;const{data}=await sb.from('videos').select('video_url,thumbnail').eq('id',id).single();const{error}=await sb.from('videos').delete().eq('id',id);if(error)return alert('❌ حذف ناموفق بود.');if(data?.video_url)await deleteStorageUrl('videos',data.video_url);if(data?.thumbnail)await deleteStorageUrl('gallery',data.thumbnail);await renderVideos();alert('✅ فیلم حذف شد.');}
+saveVideoBtn?.addEventListener('click',async()=>{
+    const title=videoTitle.value.trim(),description=videoDescription.value.trim(),category=videoCategory.value.trim(),id=videoEditId.value;
+    if(!title)return alert('عنوان فیلم را وارد کنید.');
+    let url=videoUrl.value.trim()||null,thumb=videoThumbnail.value.trim()||null;
+    try{if(videoFile.files[0])url=await uploadToBucket('videos',videoFile.files[0]);}catch(e){console.error(e);return alert('❌ آپلود فیلم ناموفق بود.');}
+    const p={title,description,category,video_url:url,thumbnail:thumb,updated_at:new Date().toISOString()};
+    const r=id?await sb.from('videos').update(p).eq('id',id):await sb.from('videos').insert(p);
+    if(r.error)return alert('❌ ذخیره فیلم ناموفق بود.');
+    clear(['videoTitle','videoDescription','videoCategory','videoUrl','videoThumbnail','videoEditId']);videoFile.value='';await renderVideos();alert('✅ فیلم ذخیره شد.');
+});
 
-        // ===== بارگذاری همه داده‌ها =====
-        function loadAllData() {
-            renderNewsList();
-            renderEventsList();
-            renderRegistrationsList();
-            renderGalleryList();
-            loadSettings();
-            loadNotice();
-        }
+/* ---------- audios ---------- */
+async function renderAudios(){const box=audioList;if(!box)return;const{data,error}=await sb.from('audios').select('*').order('created_at',{ascending:false});if(error)return box.innerHTML='<tr><td colspan="3">❌ خطا</td></tr>';box.innerHTML=data?.length?data.map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.category)}</td><td><button class="btn-secondary" onclick="editAudio(${x.id})">✏️</button><button class="btn-danger" onclick="deleteAudio(${x.id})">🗑️</button></td></tr>`).join(''):'<tr><td colspan="3">صوتی موجود نیست.</td></tr>';}
+async function editAudio(id){const{data}=await sb.from('audios').select('*').eq('id',id).single();if(!data)return;audioTitle.value=data.title||'';audioDescription.value=data.description||'';audioCategory.value=data.category||'';audioUrl.value=data.audio_url||'';audioImage.value=data.image||'';audioEditId.value=id;}
+async function deleteAudio(id){if(!confirm('حذف صوت و فایل آن انجام شود؟'))return;const{data}=await sb.from('audios').select('audio_url,image').eq('id',id).single();const{error}=await sb.from('audios').delete().eq('id',id);if(error)return alert('❌ حذف ناموفق بود.');if(data?.audio_url)await deleteStorageUrl('audios',data.audio_url);if(data?.image)await deleteStorageUrl('gallery',data.image);await renderAudios();alert('✅ صوت حذف شد.');}
+saveAudioBtn?.addEventListener('click',async()=>{
+    const title=audioTitle.value.trim(),description=audioDescription.value.trim(),category=audioCategory.value.trim(),id=audioEditId.value;
+    if(!title)return alert('عنوان صوت را وارد کنید.');
+    let url=audioUrl.value.trim()||null,image=audioImage.value.trim()||null;
+    try{if(audioFile.files[0])url=await uploadToBucket('audios',audioFile.files[0]);}catch(e){console.error(e);return alert('❌ آپلود صوت ناموفق بود.');}
+    const p={title,description,category,audio_url:url,image,updated_at:new Date().toISOString()};
+    const r=id?await sb.from('audios').update(p).eq('id',id):await sb.from('audios').insert(p);
+    if(r.error)return alert('❌ ذخیره صوت ناموفق بود.');
+    clear(['audioTitle','audioDescription','audioCategory','audioUrl','audioImage','audioEditId']);audioFile.value='';await renderAudios();alert('✅ صوت ذخیره شد.');
+});
 
-        // ===== آمار =====
-        function updateStats() {
-            document.getElementById('statNews').textContent = newsData.length;
-            document.getElementById('statEvents').textContent = eventsData.length;
-            document.getElementById('statRegistrations').textContent = registrationsData.length;
-            document.getElementById('statGallery').textContent = galleryData.length;
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
-        }
+/* ---------- image upload for news/events ---------- */
+async function uploadImageToBase64(input,targetId){
+    const file=input.files?.[0];if(!file)return;
+    try{
+        const url=await uploadToBucket('gallery',file);
+        document.getElementById(targetId).value=url;
+        alert('✅ تصویر در Storage آپلود شد.');
+    }catch(e){console.error(e);alert('❌ آپلود تصویر ناموفق بود.');}
+}
+window.uploadImageToBase64=uploadImageToBase64;
 
-        // ===== آپلود تصویر به Base64 =====
-        function uploadImageToBase64(input, targetId) {
-            if (!input.files || !input.files[0]) return;
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById(targetId).value = e.target.result;
-                alert('✅ تصویر با موفقیت بارگذاری شد.');
-            };
-            reader.readAsDataURL(file);
-        }
-        window.uploadImageToBase64 = uploadImageToBase64;
+/* ---------- globals ---------- */
+window.logout=logout; window.editNews=editNews; window.deleteNews=deleteNews;
+window.editEvent=editEvent; window.deleteEvent=deleteEvent;
+window.deleteGalleryItem=deleteGalleryItem;
+window.editQuran=editQuran; window.deleteQuran=deleteQuran;
+window.editHadith=editHadith; window.deleteHadith=deleteHadith;
+window.editAhkam=editAhkam; window.deleteAhkam=deleteAhkam;
+window.editVideo=editVideo; window.deleteVideo=deleteVideo;
+window.editAudio=editAudio; window.deleteAudio=deleteAudio;
 
-        // ===== مدیریت اخبار =====
-        function renderNewsList() {
-            const tbody = document.getElementById('adminNewsList');
-            if (!tbody) return;
-            if (newsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">خبری موجود نیست.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = newsData.map(news => `
-                <tr>
-                    <td>${news.title}</td>
-                    <td>${news.category}</td>
-                    <td>${news.date || 'نامشخص'}</td>
-                    <td>
-                        <button class="btn-secondary" onclick="editNews(${news.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
-                        <button class="btn-danger" onclick="deleteNews(${news.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function deleteNews(id) {
-            if (confirm('آیا از حذف این خبر مطمئن هستید؟')) {
-                newsData = newsData.filter(n => n.id !== id);
-                saveData('masjedNews', newsData);
-                renderNewsList();
-                updateStats();
-                if (editingNewsId === id) cancelNewsEdit();
-            }
-        }
-
-        function editNews(id) {
-            const news = newsData.find(n => n.id === id);
-            if (!news) return;
-            editingNewsId = id;
-            document.getElementById('adminNewsTitle').value = news.title;
-            document.getElementById('adminNewsCategory').value = news.category;
-            document.getElementById('adminNewsContent').value = news.content;
-            document.getElementById('adminNewsDate').value = news.date || '';
-            document.getElementById('adminNewsImage').value = news.image || '';
-            document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش خبر';
-            document.getElementById('adminEditNewsId').value = id;
-            document.getElementById('panel-news').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelNewsEdit() {
-            editingNewsId = null;
-            document.getElementById('adminNewsTitle').value = '';
-            document.getElementById('adminNewsCategory').value = 'مذهبی';
-            document.getElementById('adminNewsContent').value = '';
-            document.getElementById('adminNewsDate').value = '';
-            document.getElementById('adminNewsImage').value = '';
-            document.getElementById('adminSaveNewsBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره خبر';
-            document.getElementById('adminEditNewsId').value = '';
-        }
-
-        document.getElementById('adminSaveNewsBtn')?.addEventListener('click', function() {
-            const title = document.getElementById('adminNewsTitle').value.trim();
-            const category = document.getElementById('adminNewsCategory').value;
-            const content = document.getElementById('adminNewsContent').value.trim();
-            const date = document.getElementById('adminNewsDate').value.trim();
-            const image = document.getElementById('adminNewsImage').value.trim();
-
-            if (!title || !content) {
-                alert('لطفاً عنوان و متن خبر را پر کنید.');
-                return;
-            }
-
-            const editId = parseInt(document.getElementById('adminEditNewsId').value);
-
-            if (editId) {
-                const index = newsData.findIndex(n => n.id === editId);
-                if (index !== -1) {
-                    newsData[index] = { ...newsData[index], title, category, content, date: date || 'تاریخ نامشخص', image };
-                }
-                cancelNewsEdit();
-            } else {
-                const newNews = { id: Date.now(), title, category, content, date: date || 'تاریخ نامشخص', image };
-                newsData.push(newNews);
-            }
-
-            saveData('masjedNews', newsData);
-            renderNewsList();
-            updateStats();
-            alert(editId ? '✅ خبر با موفقیت ویرایش شد.' : '✅ خبر با موفقیت اضافه شد.');
-            cancelNewsEdit();
-        });
-
-        // ===== مدیریت رویدادها =====
-        function renderEventsList() {
-            const tbody = document.getElementById('adminEventsList');
-            if (!tbody) return;
-            if (eventsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">رویدادی موجود نیست.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = eventsData.map(event => `
-                <tr>
-                    <td>${event.title}</td>
-                    <td>${event.date || 'نامشخص'}</td>
-                    <td>${event.hasRegistration ? '✅ فعال' : '❌ غیرفعال'}</td>
-                    <td>
-                        <button class="btn-secondary" onclick="editEvent(${event.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-edit"></i></button>
-                        <button class="btn-danger" onclick="deleteEvent(${event.id})" style="padding:0.2rem 0.8rem; font-size:0.75rem;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function deleteEvent(id) {
-            if (confirm('آیا از حذف این رویداد مطمئن هستید؟')) {
-                eventsData = eventsData.filter(e => e.id !== id);
-                saveData('masjedEvents', eventsData);
-                renderEventsList();
-                updateStats();
-                if (editingEventId === id) cancelEventEdit();
-            }
-        }
-
-        function editEvent(id) {
-            const event = eventsData.find(e => e.id === id);
-            if (!event) return;
-            editingEventId = id;
-            document.getElementById('adminEventTitle').value = event.title;
-            document.getElementById('adminEventDate').value = event.date || '';
-            document.getElementById('adminEventTime').value = event.time || '';
-            document.getElementById('adminEventLocation').value = event.location || '';
-            document.getElementById('adminEventDesc').value = event.desc || '';
-            document.getElementById('adminEventImage').value = event.image || '';
-            document.getElementById('adminEventHasRegistration').checked = event.hasRegistration || false;
-            document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-edit"></i> ویرایش رویداد';
-            document.getElementById('adminEditEventId').value = id;
-            document.getElementById('panel-events').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelEventEdit() {
-            editingEventId = null;
-            document.getElementById('adminEventTitle').value = '';
-            document.getElementById('adminEventDate').value = '';
-            document.getElementById('adminEventTime').value = '';
-            document.getElementById('adminEventLocation').value = '';
-            document.getElementById('adminEventDesc').value = '';
-            document.getElementById('adminEventImage').value = '';
-            document.getElementById('adminEventHasRegistration').checked = false;
-            document.getElementById('adminSaveEventBtn').innerHTML = '<i class="fas fa-save"></i> ذخیره رویداد';
-            document.getElementById('adminEditEventId').value = '';
-        }
-
-        document.getElementById('adminSaveEventBtn')?.addEventListener('click', function() {
-            const title = document.getElementById('adminEventTitle').value.trim();
-            const date = document.getElementById('adminEventDate').value.trim();
-            const time = document.getElementById('adminEventTime').value.trim();
-            const location = document.getElementById('adminEventLocation').value.trim();
-            const desc = document.getElementById('adminEventDesc').value.trim();
-            const image = document.getElementById('adminEventImage').value.trim();
-            const hasRegistration = document.getElementById('adminEventHasRegistration').checked;
-
-            if (!title || !desc) {
-                alert('لطفاً عنوان و توضیحات رویداد را پر کنید.');
-                return;
-            }
-
-            const editId = parseInt(document.getElementById('adminEditEventId').value);
-
-            if (editId) {
-                const index = eventsData.findIndex(e => e.id === editId);
-                if (index !== -1) {
-                    eventsData[index] = { ...eventsData[index], title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration };
-                }
-                cancelEventEdit();
-            } else {
-                const newEvent = { id: Date.now(), title, date: date || 'تاریخ نامشخص', time, location, desc, image, hasRegistration };
-                eventsData.push(newEvent);
-            }
-
-            saveData('masjedEvents', eventsData);
-            renderEventsList();
-            updateStats();
-            alert(editId ? '✅ رویداد با موفقیت ویرایش شد.' : '✅ رویداد با موفقیت اضافه شد.');
-            cancelEventEdit();
-        });
-
-        // ===== ثبت‌نام‌ها =====
-        function renderRegistrationsList() {
-            const tbody = document.getElementById('adminRegistrationsList');
-            if (!tbody) return;
-            if (registrationsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="empty-msg">هیچ ثبت‌نامی انجام نشده است.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = registrationsData.map(reg => `
-                <tr>
-                    <td>${reg.eventTitle || 'نامشخص'}</td>
-                    <td>${reg.fullName}</td>
-                    <td>${reg.nationalCode}</td>
-                    <td>${reg.phone}</td>
-                    <td>${reg.fatherName}</td>
-                    <td>${reg.birthDate}</td>
-                    <td>${reg.registeredAt || 'نامشخص'}</td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('refreshRegistrationsBtn')?.addEventListener('click', function() {
-            registrationsData = loadData('masjedRegistrations', []);
-            renderRegistrationsList();
-            updateStats();
-            alert('✅ لیست ثبت‌نام‌ها بازخوانی شد.');
-        });
-
-        // ===== خروجی اکسل =====
-        document.getElementById('exportExcelBtn')?.addEventListener('click', function() {
-            if (registrationsData.length === 0) {
-                alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
-                return;
-            }
-            const headers = ['رویداد', 'نام و نام‌خانوادگی', 'کد ملی', 'تلفن', 'نام پدر', 'تاریخ تولد', 'تاریخ ثبت'];
-            const rows = registrationsData.map(reg => [
-                reg.eventTitle || '',
-                reg.fullName || '',
-                reg.nationalCode || '',
-                reg.phone || '',
-                reg.fatherName || '',
-                reg.birthDate || '',
-                reg.registeredAt || ''
-            ]);
-            let csvContent = headers.join(',') + '\n';
-            rows.forEach(row => { csvContent += row.join(',') + '\n'; });
-            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `ثبت_نام_مسجد_${new Date().toLocaleDateString('fa-IR')}.csv`;
-            link.click();
-            URL.revokeObjectURL(link.href);
-        });
-
-        // ===== خروجی PDF =====
-        document.getElementById('exportPdfBtn')?.addEventListener('click', function() {
-            if (registrationsData.length === 0) {
-                alert('⚠️ هیچ داده‌ای برای خروجی وجود ندارد.');
-                return;
-            }
-            let htmlContent = `
-                <html dir="rtl">
-                <head><meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Vazir', Tahoma, sans-serif; padding: 20px; }
-                    h2 { color: #1a5c3a; text-align: center; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th { background: #c9a84c; color: #1a1a1a; padding: 10px; border: 1px solid #ddd; }
-                    td { padding: 8px; border: 1px solid #ddd; text-align: center; }
-                </style>
-                </head>
-                <body>
-                    <h2>📋 لیست ثبت‌نام‌های مسجد امام حسن مجتبی (ع)</h2>
-                    <p>تاریخ: ${new Date().toLocaleDateString('fa-IR')}</p>
-                    <table>
-                        <thead><tr><th>رویداد</th><th>نام و نام‌خانوادگی</th><th>کد ملی</th><th>تلفن</th><th>نام پدر</th><th>تاریخ تولد</th><th>تاریخ ثبت</th></tr></thead>
-                        <tbody>
-            `;
-            registrationsData.forEach(reg => {
-                htmlContent += `
-                    <tr>
-                        <td>${reg.eventTitle || ''}</td>
-                        <td>${reg.fullName || ''}</td>
-                        <td>${reg.nationalCode || ''}</td>
-                        <td>${reg.phone || ''}</td>
-                        <td>${reg.fatherName || ''}</td>
-                        <td>${reg.birthDate || ''}</td>
-                        <td>${reg.registeredAt || ''}</td>
-                    </tr>
-                `;
-            });
-            htmlContent += `
-                        </tbody>
-                    </table>
-                    <p style="margin-top:30px; color:#8a7a6a; text-align:center;">این فایل به صورت خودکار از پنل مدیریت مسجد تولید شده است.</p>
-                </body>
-                </html>
-            `;
-            const win = window.open('', '_blank');
-            win.document.write(htmlContent);
-            win.document.close();
-            setTimeout(() => { win.print(); }, 500);
-        });
-
-        // ===== گالری =====
-        function renderGalleryList() {
-            const container = document.getElementById('adminGalleryList');
-            if (!container) return;
-            if (galleryData.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">تصویری موجود نیست.</p>`;
-                return;
-            }
-            container.innerHTML = galleryData.map(item => `
-                <div style="background:var(--bg-card); border-radius:12px; padding:0.5rem; text-align:center; border:1px solid var(--card-border-color);">
-                    <img src="${item.image}" alt="${item.title}" style="width:100%; height:120px; object-fit:cover; border-radius:8px;" loading="lazy" />
-                    <p style="font-size:0.8rem; margin:0.3rem 0; color:var(--dark);">${item.title || 'بدون عنوان'}</p>
-                    <button class="btn-danger" onclick="deleteGalleryItem(${item.id})" style="padding:0.2rem 0.8rem; font-size:0.7rem;"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function deleteGalleryItem(id) {
-            if (confirm('آیا از حذف این تصویر مطمئن هستید؟')) {
-                galleryData = galleryData.filter(g => g.id !== id);
-                saveData('masjedGallery', galleryData);
-                renderGalleryList();
-                updateStats();
-            }
-        }
-
-        document.getElementById('adminSaveGalleryBtn')?.addEventListener('click', function() {
-            const title = document.getElementById('adminGalleryTitle').value.trim();
-            const image = document.getElementById('adminGalleryImage').value.trim();
-            if (!image) {
-                alert('لطفاً لینک تصویر را وارد کنید.');
-                return;
-            }
-            const newItem = { id: Date.now(), title: title || 'تصویر', image };
-            galleryData.push(newItem);
-            saveData('masjedGallery', galleryData);
-            renderGalleryList();
-            updateStats();
-            document.getElementById('adminGalleryTitle').value = '';
-            document.getElementById('adminGalleryImage').value = '';
-            alert('✅ تصویر با موفقیت اضافه شد.');
-        });
-
-        // ===== اطلاعیه فوری =====
-        function loadNotice() {
-            document.getElementById('adminNoticeText').value = urgentNoticeData.text || '';
-            document.getElementById('adminNoticeActive').checked = urgentNoticeData.active !== false;
-        }
-
-        document.getElementById('adminSaveNoticeBtn')?.addEventListener('click', function() {
-            const text = document.getElementById('adminNoticeText').value.trim();
-            const active = document.getElementById('adminNoticeActive').checked;
-            if (!text) {
-                alert('لطفاً متن اطلاعیه را وارد کنید.');
-                return;
-            }
-            urgentNoticeData.text = text;
-            urgentNoticeData.active = active;
-            saveData('masjedUrgentNotice', urgentNoticeData);
-            alert('✅ اطلاعیه با موفقیت ذخیره شد.');
-        });
-
-        // ===== تنظیمات =====
-        function loadSettings() {
-            document.getElementById('adminSettingsImam').value = settingsData.imam || '';
-            document.getElementById('adminSettingsPhone').value = settingsData.phone || '';
-        }
-
-        document.getElementById('adminSaveSettingsBtn')?.addEventListener('click', function() {
-            const imam = document.getElementById('adminSettingsImam').value.trim();
-            const phone = document.getElementById('adminSettingsPhone').value.trim();
-            if (!imam || !phone) {
-                alert('لطفاً هر دو فیلد را پر کنید.');
-                return;
-            }
-            settingsData.imam = imam;
-            settingsData.phone = phone;
-            saveData('masjedSettings', settingsData);
-            alert('✅ تنظیمات با موفقیت ذخیره شد.');
-        });
-
-        // ===== مقداردهی اولیه =====
-        document.addEventListener('DOMContentLoaded', function() {
-            // ابتدا از sessionStorage و سپس از localStorage بررسی کن
-            if (sessionStorage.getItem('adminLoggedIn') === 'true' || localStorage.getItem('adminLoggedIn') === 'true') {
-                loginOverlay.classList.add('hidden');
-                document.getElementById('adminContainer').style.display = 'flex';
-                loadAllData();
-                updateStats();
-                // برای اطمینان، sessionStorage را هم تنظیم کن
-                sessionStorage.setItem('adminLoggedIn', 'true');
-            }
-        });
-
-        // ===== توابع سراسری برای استفاده در onclick =====
-        window.logout = logout;
-        window.deleteNews = deleteNews;
-        window.editNews = editNews;
-        window.deleteEvent = deleteEvent;
-        window.editEvent = editEvent;
-        window.deleteGalleryItem = deleteGalleryItem;
-        window.cancelNewsEdit = cancelNewsEdit;
-        window.cancelEventEdit = cancelEventEdit;
-        window.uploadImageToBase64 = uploadImageToBase64;
+/* ---------- start ---------- */
+document.addEventListener('DOMContentLoaded', checkAuth);
+sb.auth.onAuthStateChange((_event, session)=>{
+    if(!session) hideAdmin();
+    else if(session.user.id===ADMIN_UID) showAdmin();
+});
     </script>
 </body>
 </html>
